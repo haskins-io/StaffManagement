@@ -11,4 +11,6 @@ object Rates: Table() {
     val weekly: Column<Int> = integer("week_rate")
     val monthly: Column<Int> = integer("month_rate")
     val annually: Column<Int> = integer("year_rate")
+
+    override val primaryKey = PrimaryKey(Departments.id, name="rates_pk")
 }

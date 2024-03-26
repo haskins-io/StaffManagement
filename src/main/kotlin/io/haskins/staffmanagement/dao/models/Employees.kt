@@ -9,4 +9,6 @@ object Employees: Table() {
     val departmentId: Column<Int> = integer("department_id")
     val rateId: Column<Int> = integer("rate_id")
     val name : Column<String> = varchar("name", length = 100)
+
+    override val primaryKey = PrimaryKey(Departments.id, name="employees_pk")
 }

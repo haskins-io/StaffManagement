@@ -3,6 +3,7 @@ package io.haskins.staffmanagement.dao
 import io.haskins.staffmanagement.dao.models.Projects
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.models.Project
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -36,5 +37,23 @@ class ProjectDao private constructor() {
         }
 
         return projects
+    }
+
+    fun getProject(id: Int): Project {
+
+        var project = Project(0, "","")
+
+        transaction {
+            val tmp = Projects.selectAll().where { Projects.id eq id }
+            for (t in tmp) {
+                project = Project(
+                    t[Projects.id],
+                    t[Projects.name],
+                    t[Projects.code]
+                )
+            }
+        }
+
+        return project
     }
 }
