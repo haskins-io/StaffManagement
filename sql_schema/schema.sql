@@ -63,7 +63,13 @@ create table projects
     code       text,
     project_id integer default nextval('product_product_id_seq'::regclass) not null
         constraint projects_pk
-            primary key
+            primary key,
+    budget     integer,
+    status     integer,
+    priority   integer,
+    due_date   date,
+    dscription text,
+    progress   integer
 );
 
 alter table projects
@@ -141,4 +147,26 @@ alter table roles
     owner to markhaskins;
 
 alter sequence role_role_id_seq owned by roles.role_id;
+
+create table employees_holidays
+(
+    eh_id       serial
+        constraint employees_holidays_pk
+            primary key,
+    employee_id integer
+);
+
+alter table employees_holidays
+    owner to postgres;
+
+create table project_notes
+(
+    pn_id      serial
+        constraint project_notes_pk
+            primary key,
+    project_id integer
+);
+
+alter table project_notes
+    owner to postgres;
 
