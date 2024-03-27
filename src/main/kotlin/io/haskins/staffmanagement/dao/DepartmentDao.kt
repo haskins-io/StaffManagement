@@ -1,8 +1,9 @@
 package io.haskins.staffmanagement.dao
 
-import io.haskins.staffmanagement.dao.models.Departments
+import io.haskins.staffmanagement.dao.models.Employees
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
+import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -24,11 +25,16 @@ class DepartmentDao private constructor() {
 
         transaction {
 
-            for (department in Departments.selectAll()) {
+            val tmp = Employees
+                .selectAll()
+                .where {
+                    Employees.departmentId.eq(0) and Employees.managerId.eq(0)
+            }.toList()
+            for (department in tmp) {
 
                 val item = ListItem(
-                    department[Departments.id],
-                    department[Departments.name],
+                    department[Employees.id],
+                    department[Employees.name],
                     FilterType.Departments.id
                 )
 

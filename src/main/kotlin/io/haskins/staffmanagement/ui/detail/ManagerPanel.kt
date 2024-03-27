@@ -16,7 +16,7 @@ import io.haskins.staffmanagement.ui.components.TableCell
 @Composable
 fun managerPanel(currentDetail: MutableState<ListItem>) {
 
-    var employees = EmployeeDao.getInstance().employeesForManager(currentDetail.value.id)
+    val employees = EmployeeDao.getInstance().employeesForManager(currentDetail.value.id)
 
     val column1Weight = .3f
     val column2Weight = .7f

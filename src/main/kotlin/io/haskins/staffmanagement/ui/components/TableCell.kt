@@ -1,7 +1,6 @@
 package io.haskins.staffmanagement.ui.components
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -10,7 +9,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun RowScope.TableCell(
+fun TableCell(
     text: String,
     weight: Float
 ) {
@@ -18,7 +17,7 @@ fun RowScope.TableCell(
         text = text,
         Modifier
             .border(1.dp, Color.Black)
-            .weight(weight)
+//            .weight(weight)
             .padding(8.dp)
     )
 }

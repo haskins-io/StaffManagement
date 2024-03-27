@@ -1,13 +1,3 @@
-create sequence employee_employee_id_seq
-    as integer;
-
-alter sequence employee_employee_id_seq owner to markhaskins;
-
-create sequence hose_hose_id_seq
-    as integer;
-
-alter sequence hose_hose_id_seq owner to markhaskins;
-
 create sequence product_product_id_seq
     as integer;
 
@@ -23,97 +13,40 @@ create sequence role_role_id_seq
 
 alter sequence role_role_id_seq owner to markhaskins;
 
-create sequence sem_id_seq
-    as integer;
-
-alter sequence sem_id_seq owner to markhaskins;
-
-create table departments
+create table employees
 (
-    name          text,
-    department_id integer default nextval('hose_hose_id_seq'::regclass) not null
-        constraint departments_pk
-            primary key
+    department_id   integer,
+    manager_id      integer,
+    name            text,
+    rate_id         integer,
+    employee_id     integer default 0 not null
+        constraint employees_pk
+            primary key,
+    work_allocation integer default 0 not null
 );
 
-alter table departments
+alter table employees
     owner to markhaskins;
-
-alter sequence hose_hose_id_seq owned by departments.department_id;
-
-create table managers
-(
-    name          text,
-    department_id integer
-        constraint managers_departments_department_id_fk
-            references departments,
-    manager_id    integer default nextval('sem_id_seq'::regclass) not null
-        constraint managers_pk
-            primary key
-);
-
-alter table managers
-    owner to markhaskins;
-
-alter sequence sem_id_seq owned by managers.manager_id;
 
 create table projects
 (
-    name       text,
-    code       text,
-    project_id integer default nextval('product_product_id_seq'::regclass) not null
+    name        text,
+    code        text,
+    project_id  integer default nextval('product_product_id_seq'::regclass) not null
         constraint projects_pk
             primary key,
-    budget     integer,
-    status     integer,
-    priority   integer,
-    due_date   date,
-    dscription text,
-    progress   integer
+    budget      integer default 0                                           not null,
+    status      integer default 0                                           not null,
+    priority    integer default 0                                           not null,
+    due_date    date    default now()                                       not null,
+    description text                                                        not null,
+    progress    integer default 0                                           not null
 );
 
 alter table projects
     owner to markhaskins;
 
 alter sequence product_product_id_seq owned by projects.project_id;
-
-create table rates
-(
-    rate_id    integer default nextval('rate_rate_id_seq'::regclass) not null
-        constraint rates_pk
-            primary key,
-    name       text,
-    hour_rate  real,
-    day_rate   real,
-    week_rate  real,
-    month_rate real,
-    year_rate  real
-);
-
-alter table rates
-    owner to markhaskins;
-
-alter sequence rate_rate_id_seq owned by rates.rate_id;
-
-create table employees
-(
-    department_id integer,
-    manager_id    integer
-        constraint employees_managers_manager_id_fk
-            references managers,
-    name          text,
-    rate_id       integer
-        constraint employees_rates_rate_id_fk
-            references rates,
-    employee_id   integer default nextval('employee_employee_id_seq'::regclass) not null
-        constraint employees_pk
-            primary key
-);
-
-alter table employees
-    owner to markhaskins;
-
-alter sequence employee_employee_id_seq owned by employees.employee_id;
 
 create table project_employee
 (
@@ -135,6 +68,24 @@ create table project_employee
 alter table project_employee
     owner to markhaskins;
 
+create table rates
+(
+    rate_id    integer default nextval('rate_rate_id_seq'::regclass) not null
+        constraint rates_pk
+            primary key,
+    name       text,
+    hour_rate  real    default 0                                     not null,
+    day_rate   real    default 0                                     not null,
+    week_rate  real    default 0                                     not null,
+    month_rate real    default 0                                     not null,
+    year_rate  real    default 0                                     not null
+);
+
+alter table rates
+    owner to markhaskins;
+
+alter sequence rate_rate_id_seq owned by rates.rate_id;
+
 create table roles
 (
     role_id integer default nextval('role_role_id_seq'::regclass) not null
@@ -154,6 +105,8 @@ create table employees_holidays
         constraint employees_holidays_pk
             primary key,
     employee_id integer
+        constraint employees_holidays_employees__fk
+            references employees
 );
 
 alter table employees_holidays

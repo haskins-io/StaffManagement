@@ -41,7 +41,7 @@ class EmployeeDao private constructor() {
 
     fun employeesForDepartment(departmentId: Int): List<Employee> {
 
-        var employees = mutableListOf<Employee>()
+        val employees = mutableListOf<Employee>()
 
         transaction {
             val tmp = Employees.selectAll().where { Employees.departmentId eq departmentId }.toList()
@@ -63,7 +63,7 @@ class EmployeeDao private constructor() {
 
     fun employeesForManager(managerId: Int): List<Employee> {
 
-        var employees = mutableListOf<Employee>()
+        val employees = mutableListOf<Employee>()
 
         transaction {
             val tmp = Employees.selectAll().where { Employees.managerId eq managerId }.toList()

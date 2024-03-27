@@ -39,7 +39,7 @@ fun dataList(currentDetail: MutableState<ListItem>) {
                 }
             ) {
                 TextField(
-                    value = selected.type_name,
+                    value = selected.name,
                     onValueChange = {},
                     readOnly = true,
                     trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
@@ -51,7 +51,7 @@ fun dataList(currentDetail: MutableState<ListItem>) {
                 ) {
                     filterOptions.forEach { item ->
                         DropdownMenuItem(
-                            content = { Text(text = item.type_name) },
+                            content = { Text(text = item.name) },
                             onClick = {
                                 selected = item
                                 expanded = false
@@ -79,7 +79,7 @@ fun listBody(filter: ListFilter,
 
     var data = listOf<ListItem>()
 
-    when(filter.type_id) {
+    when(filter.id) {
         FilterType.Projects.id -> data = ProjectDao.getInstance().allProjects()
         FilterType.Departments.id -> data = DepartmentDao.getInstance().allDepartments()
         FilterType.Managers.id -> data = ManagerDao.getInstance().allManagers()

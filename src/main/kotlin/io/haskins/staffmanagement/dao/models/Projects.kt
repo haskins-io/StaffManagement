@@ -8,5 +8,5 @@ object Projects: Table() {
     val name : Column<String> = varchar("name", length = 100)
     val code : Column<String> = varchar("code", length = 100)
 
-    override val primaryKey = PrimaryKey(Departments.id, name="projects_pk")
+    override val primaryKey = PrimaryKey(id, name="projects_pk")
 }

@@ -7,5 +7,5 @@ object Roles: Table() {
     val id: Column<Int> = integer("role_id").autoIncrement()
     val name : Column<String> = varchar("name", length = 100)
 
-    override val primaryKey = PrimaryKey(Departments.id, name="roles_pk")
+    override val primaryKey = PrimaryKey(id, name="roles_pk")
 }

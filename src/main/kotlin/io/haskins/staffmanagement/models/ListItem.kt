@@ -1,11 +1,5 @@
 package io.haskins.staffmanagement.models
 
-class ListItem(
-    iId: Int,
-    iName: String,
-    iType: Int) {
+class ListItem(val id: Int, val name: String, val type: Int) {
 
-    val id = iId;
-    val name = iName;
-    val type = iType;
 }

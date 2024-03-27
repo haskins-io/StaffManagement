@@ -1,15 +1,5 @@
 package io.haskins.staffmanagement.models
 
-class Employee(
-    eId: Int,
-    eName: String,
-    eManagerId: Int,
-    eDepartmentId: Int,
-    eRateId: Int,
-) {
-    val id = eId;
-    val name = eName;
-    val managerId = eManagerId;
-    val departmentId = eDepartmentId;
-    val rateId = eRateId;
+class Employee(val id: Int, val name: String, val managerId: Int, val departmentId: Int, val rateId: Int) {
+
 }

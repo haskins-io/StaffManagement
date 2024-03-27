@@ -1,11 +1,5 @@
 package io.haskins.staffmanagement.models
 
-class Manager(
-    mId: Int,
-    mName: String,
-    mDepartmentId: Int,
-) {
-    val id = mId
-    val name = mName
-    val departmentId = mDepartmentId
+class Manager(val id: Int, val name: String, val departmentId: Int) {
+
 }

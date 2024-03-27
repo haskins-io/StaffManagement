@@ -12,5 +12,5 @@ object Rates: Table() {
     val monthly: Column<Int> = integer("month_rate")
     val annually: Column<Int> = integer("year_rate")
 
-    override val primaryKey = PrimaryKey(Departments.id, name="rates_pk")
+    override val primaryKey = PrimaryKey(id, name="rates_pk")
 }
