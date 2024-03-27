@@ -13,6 +13,21 @@ create sequence role_role_id_seq
 
 alter sequence role_role_id_seq owner to markhaskins;
 
+create sequence project_employee_pe_id_seq
+    as integer;
+
+alter sequence project_employee_pe_id_seq owner to markhaskins;
+
+create sequence employees_holidays_eh_id_seq
+    as integer;
+
+alter sequence employees_holidays_eh_id_seq owner to postgres;
+
+create sequence project_notes_pn_id_seq
+    as integer;
+
+alter sequence project_notes_pn_id_seq owner to postgres;
+
 create table employees
 (
     department_id   integer,
@@ -48,7 +63,7 @@ alter table projects
 
 alter sequence product_product_id_seq owned by projects.project_id;
 
-create table project_employee
+create table projectemployees
 (
     employee_id integer
         constraint project_employee_employees__fk
@@ -59,14 +74,16 @@ create table project_employee
     allocation  integer,
     start       date,
     "end"       date,
-    cost        real,
-    pe_id       serial
+    cost        real    default 0                                               not null,
+    pe_id       integer default nextval('project_employee_pe_id_seq'::regclass) not null
         constraint project_employee_pk
             primary key
 );
 
-alter table project_employee
+alter table projectemployees
     owner to markhaskins;
+
+alter sequence project_employee_pe_id_seq owned by projectemployees.pe_id;
 
 create table rates
 (
@@ -99,9 +116,9 @@ alter table roles
 
 alter sequence role_role_id_seq owned by roles.role_id;
 
-create table employees_holidays
+create table employeeholidays
 (
-    eh_id       serial
+    eh_id       integer default nextval('employees_holidays_eh_id_seq'::regclass) not null
         constraint employees_holidays_pk
             primary key,
     employee_id integer
@@ -109,17 +126,21 @@ create table employees_holidays
             references employees
 );
 
-alter table employees_holidays
+alter table employeeholidays
     owner to postgres;
 
-create table project_notes
+alter sequence employees_holidays_eh_id_seq owned by employeeholidays.eh_id;
+
+create table projectnotes
 (
-    pn_id      serial
+    pn_id      integer default nextval('project_notes_pn_id_seq'::regclass) not null
         constraint project_notes_pk
             primary key,
     project_id integer
 );
 
-alter table project_notes
+alter table projectnotes
     owner to postgres;
+
+alter sequence project_notes_pn_id_seq owned by projectnotes.pn_id;
 
