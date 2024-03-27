@@ -1,15 +1,16 @@
-package io.haskins.staffmanagement.ui.detail
+package io.haskins.staffmanagement.ui.detail.project
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.Tab
-import androidx.compose.material.TabRow
-import androidx.compose.material.Text
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import io.haskins.staffmanagement.models.ListItem
 
 @Composable
-fun projectPanel() {
+fun projectPanel(currentDetail: MutableState<ListItem>) {
 
     var tabIndex by remember { mutableStateOf(0) }
 
@@ -25,9 +26,9 @@ fun projectPanel() {
             }
         }
         when (tabIndex) {
-            0 -> Text("Tab 0")
-            1 -> Text("Tab 1")
-            2 -> Text("Tab 2")
+            0 -> projectOverview()
+            1 -> projectNotes()
+            2 -> projectResources()
         }
     }
 }

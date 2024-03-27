@@ -24,6 +24,8 @@ dependencies {
 
     implementation("org.postgresql:postgresql:42.7.0")
 
+    implementation("org.jetbrains.compose.material3:material3-desktop:1.6.1")
+
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-crypt:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")

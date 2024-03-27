@@ -11,17 +11,6 @@ fun main() = application {
 
     Database.connect("jdbc:postgresql://localhost:5432/postgres", driver="org.postgresql.Driver", user="postgres", password = "postgres")
 
-//    transaction {
-//
-//        val result = (Managers innerJoin Departments)
-//            .select(Managers.id, Managers.name, Departments.name)
-//            .where { Departments.id.eq(1) }
-//
-//        for (manager in result) {
-//            println("${manager[Managers.id]}, ${manager[Managers.name]}, ${manager[Departments.name]}")
-//        }
-//    }
-
     Window(onCloseRequest = ::exitApplication) {
         window()
     }
