@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.ui.detail.employees.employeePanel
 import io.haskins.staffmanagement.ui.detail.project.projectPanel
 
 @Composable

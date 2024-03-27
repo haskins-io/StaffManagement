@@ -1,4 +1,4 @@
-package io.haskins.staffmanagement.ui.detail.project
+package io.haskins.staffmanagement.ui.detail.employees
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import io.haskins.staffmanagement.models.ListItem
 
 @Composable
-fun projectPanel(currentDetail: MutableState<ListItem>) {
+fun employeePanel(currentDetail: MutableState<ListItem>) {
 
     var tabIndex by remember { mutableStateOf(0) }
 
-    val tabs = listOf("Overview", "Notes", "Resources")
+    val tabs = listOf("Overview", "Notes", "Holidays")
 
     Column(modifier = Modifier.fillMaxWidth()) {
         TabRow(selectedTabIndex = tabIndex) {
@@ -26,9 +26,9 @@ fun projectPanel(currentDetail: MutableState<ListItem>) {
             }
         }
         when (tabIndex) {
-            0 -> projectOverview()
-            1 -> projectNotes()
-            2 -> projectResources(currentDetail)
+            0 -> employeeOverview(currentDetail)
+            1 -> employeeNotes(currentDetail)
+            2 -> employeeHolidays(currentDetail)
         }
     }
 }

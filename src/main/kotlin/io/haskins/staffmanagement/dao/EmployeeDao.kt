@@ -1,9 +1,12 @@
 package io.haskins.staffmanagement.dao
 
 import io.haskins.staffmanagement.dao.models.Employees
+import io.haskins.staffmanagement.dao.models.ProjectEmployees
+import io.haskins.staffmanagement.dao.models.Projects
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.Employee
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.models.ProjectEmployee
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -19,12 +22,12 @@ class EmployeeDao private constructor() {
         }
     }
 
-    fun allEmployees(): List<ListItem> {
+    fun employees(): List<ListItem> {
 
         val employees = mutableListOf<ListItem>()
 
         transaction {
-            for (employee in Employees.selectAll()) {
+            for (employee in Employees.selectAll().orderBy(Employees.name)) {
 
                 val item = ListItem(
                     employee[Employees.id],
@@ -39,47 +42,30 @@ class EmployeeDao private constructor() {
         return employees
     }
 
-    fun employeesForDepartment(departmentId: Int): List<Employee> {
+    fun projects(id: Int): List<ProjectEmployee> {
 
-        val employees = mutableListOf<Employee>()
+        val projects = mutableListOf<ProjectEmployee>()
 
         transaction {
-            val tmp = Employees.selectAll().where { Employees.departmentId eq departmentId }.toList()
+
+            val tmp = (Projects innerJoin ProjectEmployees)
+                .select(Projects.name, ProjectEmployees.allocation, ProjectEmployees.cost)
+                .where {
+                    ProjectEmployees.employeeId.eq(id)
+                }.toList()
+
             for (t in tmp) {
-                val item = Employee(
-                    t[Employees.id],
-                    t[Employees.name],
-                    t[Employees.managerId],
-                    t[Employees.departmentId],
-                    t[Employees.rateId],
+                val employee = ProjectEmployee(
+                    t[Projects.name],
+                    t[ProjectEmployees.allocation],
+                    t[ProjectEmployees.cost]
                 )
 
-                employees.add(item)
+                projects.add(employee)
             }
         }
 
-        return employees
+        return projects
     }
 
-    fun employeesForManager(managerId: Int): List<Employee> {
-
-        val employees = mutableListOf<Employee>()
-
-        transaction {
-            val tmp = Employees.selectAll().where { Employees.managerId eq managerId }.toList()
-            for (t in tmp) {
-                val item = Employee(
-                    t[Employees.id],
-                    t[Employees.name],
-                    t[Employees.managerId],
-                    t[Employees.departmentId],
-                    t[Employees.rateId],
-                )
-
-                employees.add(item)
-            }
-        }
-
-        return employees
-    }
 }

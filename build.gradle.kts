@@ -25,6 +25,9 @@ dependencies {
     implementation("org.postgresql:postgresql:42.7.0")
 
     implementation("org.jetbrains.compose.material3:material3-desktop:1.6.1")
+    implementation("org.jetbrains.compose.components:components-splitpane-desktop:1.6.1")
+
+    implementation("io.github.windedge.table:table:0.1.6")
 
     implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
     implementation("org.jetbrains.exposed:exposed-crypt:$exposedVersion")

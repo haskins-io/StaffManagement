@@ -2,6 +2,7 @@ package io.haskins.staffmanagement.dao
 
 import io.haskins.staffmanagement.dao.models.Employees
 import io.haskins.staffmanagement.enums.FilterType
+import io.haskins.staffmanagement.models.Employee
 import io.haskins.staffmanagement.models.ListItem
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.selectAll
@@ -29,7 +30,10 @@ class DepartmentDao private constructor() {
                 .selectAll()
                 .where {
                     Employees.departmentId.eq(0) and Employees.managerId.eq(0)
-            }.toList()
+                }
+                .orderBy(Employees.name)
+                .toList()
+
             for (department in tmp) {
 
                 val item = ListItem(
@@ -43,5 +47,32 @@ class DepartmentDao private constructor() {
         }
 
         return departments
+    }
+
+    fun departmentEmployees(departmentId: Int): List<Employee> {
+
+        val employees = mutableListOf<Employee>()
+
+        transaction {
+            val tmp = Employees
+                .selectAll()
+                .where { Employees.departmentId eq departmentId }
+                .orderBy(Employees.name)
+                .toList()
+
+            for (t in tmp) {
+                val item = Employee(
+                    t[Employees.id],
+                    t[Employees.name],
+                    t[Employees.managerId],
+                    t[Employees.departmentId],
+                    t[Employees.rateId],
+                )
+
+                employees.add(item)
+            }
+        }
+
+        return employees
     }
 }

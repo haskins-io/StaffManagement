@@ -8,6 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
+
+val column2Weight = .7f
+
 @Composable
 fun TableCell(
     text: String,
