@@ -1,40 +1,11 @@
-# READ ME
+This is a Kotlin Multiplatform project targeting Desktop.
 
-Currently this is just me messing around with Kotlin and Compose for Desktop.
-
-## Database
-It requires a postgres database to work. Schema in sql_schema.
-
-**Note**: I'm only going to be uploading a full schema file at this point, as I'm still developing this, and things might
-change. 
-
-## Things to do
-Crud the things
+* `/composeApp` is for code that will be shared across your Compose Multiplatform applications.
+  It contains several subfolders:
+  - `commonMain` is for code that’s common for all targets.
+  - Other folders are for Kotlin code that will be compiled for only the platform indicated in the folder name.
+    For example, if you want to use Apple’s CoreCrypto for the iOS part of your Kotlin app,
+    `iosMain` would be the right folder for such calls.
 
 
-### Projects
-employees to projects
-notes / Comments
-budget
-Status - Red/Amber/Green
-Priority
-Due Date
-background information about project. Where did it comes. Why are we doing this, etc?
-tasks to project
-Project Team?
-Progress
-
-### Employee
-Holiday tracking
-
-
-## Possible ideas
-Nice Timeline/calendar view for employee allocation start/end against project
-Generate reports
-
-
-## Would be brilliant to have
-Integration into tools such as JIRA and those types of things
-multi db support
-Authentication/Authorisation
-
+Learn more about [Kotlin Multiplatform](https://www.jetbrains.com/help/kotlin-multiplatform-dev/get-started.html)…

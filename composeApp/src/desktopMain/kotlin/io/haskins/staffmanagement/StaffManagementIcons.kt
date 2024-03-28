@@ -1,0 +1,3 @@
+package io.haskins.staffmanagement
+
+object StaffManagementIcons
