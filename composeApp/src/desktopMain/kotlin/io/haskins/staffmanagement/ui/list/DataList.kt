@@ -7,7 +7,9 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.unit.dp
 import org.jetbrains.jewel.ui.component.Text
 import io.haskins.staffmanagement.dao.DepartmentDao
 import io.haskins.staffmanagement.dao.EmployeeDao
@@ -16,7 +18,11 @@ import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListFilter
 import io.haskins.staffmanagement.models.ListItem
+import org.jetbrains.jewel.intui.standalone.styling.light
+import org.jetbrains.jewel.ui.Orientation
+import org.jetbrains.jewel.ui.component.Divider
 import org.jetbrains.jewel.ui.component.Dropdown
+import org.jetbrains.jewel.ui.component.styling.DividerStyle
 
 @Composable
 fun dataList(currentDetail: MutableState<ListItem>) {
@@ -32,8 +38,8 @@ fun dataList(currentDetail: MutableState<ListItem>) {
 
     Column(Modifier.layoutId("first")) {
         Row {
-
             Dropdown(
+                modifier = Modifier.fillMaxWidth(),
                 menuContent = {
                     filterOptions.forEach { item ->
                         selectableItem(
@@ -73,11 +79,16 @@ fun listBody(filter: ListFilter,
 
     LazyColumn {
         items(items = data) { row ->
-            Row {
-                Box(modifier = Modifier.clickable {
-                    currentDetail.value = row
-                }, contentAlignment = Alignment.CenterStart) {
-                    Text(row.name)
+            Column {
+                Row(modifier = Modifier.padding(5.dp)) {
+                    Box(modifier = Modifier.clickable {
+                        currentDetail.value = row
+                    }, contentAlignment = Alignment.CenterStart) {
+                        Text(row.name)
+                    }
+                }
+                Row {
+                    Divider(Orientation.Horizontal, color = Color.LightGray, style = DividerStyle.light())
                 }
             }
         }

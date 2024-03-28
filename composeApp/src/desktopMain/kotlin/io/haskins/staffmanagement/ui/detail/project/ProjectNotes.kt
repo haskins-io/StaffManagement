@@ -4,6 +4,6 @@ import org.jetbrains.jewel.ui.component.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun projectNotes() {
+fun ProjectNotes() {
     Text("Notes Panel")
 }

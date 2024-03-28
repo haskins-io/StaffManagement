@@ -49,13 +49,14 @@ class EmployeeDao private constructor() {
         transaction {
 
             val tmp = (Projects innerJoin ProjectEmployees)
-                .select(Projects.name, ProjectEmployees.allocation, ProjectEmployees.cost)
+                .select(Projects.name, ProjectEmployees.allocation, ProjectEmployees.cost, ProjectEmployees.id)
                 .where {
                     ProjectEmployees.employeeId.eq(id)
                 }.toList()
 
             for (t in tmp) {
                 val employee = ProjectEmployee(
+                    t[ProjectEmployees.id],
                     t[Projects.name],
                     t[ProjectEmployees.allocation],
                     t[ProjectEmployees.cost]

@@ -34,7 +34,7 @@ fun main() = application {
             onCloseRequest = { exitApplication() },
             title = "Staff Management",
         ) {
-            TitleBarView()
+//            TitleBarView()
             twoColumnLayout()
         }
     }
