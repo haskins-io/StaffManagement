@@ -33,37 +33,34 @@ fun twoColumnLayout() {
     val currentDetail: MutableState<ListItem> = remember { mutableStateOf(ListItem(0,"",1)) };
 
     val splitterState = rememberSplitPaneState()
-    val hSplitterState = rememberSplitPaneState()
 
-    MaterialTheme {
-        HorizontalSplitPane(
-            splitPaneState = splitterState
-        ) {
-            first(250.dp) {
-                dataList(currentDetail)
+    HorizontalSplitPane(
+        splitPaneState = splitterState
+    ) {
+        first(250.dp) {
+            dataList(currentDetail)
+        }
+        second(50.dp) {
+            detailPanel(currentDetail)
+        }
+        splitter {
+            visiblePart {
+                Box(
+                    Modifier
+                        .width(1.dp)
+                        .fillMaxHeight()
+                        .background(MaterialTheme.colors.background)
+                )
             }
-            second(50.dp) {
-                detailPanel(currentDetail)
-            }
-            splitter {
-                visiblePart {
-                    Box(
-                        Modifier
-                            .width(1.dp)
-                            .fillMaxHeight()
-                            .background(MaterialTheme.colors.background)
-                    )
-                }
-                handle {
-                    Box(
-                        Modifier
-                            .markAsHandle()
-                            .cursorForHorizontalResize()
-                            .background(SolidColor(Color.Gray), alpha = 0.50f)
-                            .width(9.dp)
-                            .fillMaxHeight()
-                    )
-                }
+            handle {
+                Box(
+                    Modifier
+                        .markAsHandle()
+                        .cursorForHorizontalResize()
+                        .background(SolidColor(Color.Gray), alpha = 0.50f)
+                        .width(9.dp)
+                        .fillMaxHeight()
+                )
             }
         }
     }

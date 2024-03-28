@@ -1,8 +1,8 @@
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 
 plugins {
-    kotlin("jvm")
-    id("org.jetbrains.compose")
+    kotlin("jvm") version "1.9.21"
+    id("org.jetbrains.compose") version "1.6.0-dev1440"
 }
 
 group = "io.haskins.staffmanagement"
@@ -10,6 +10,7 @@ version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
+    maven("https://packages.jetbrains.team/maven/p/kpm/public/")
     maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
     google()
 }
@@ -22,7 +23,18 @@ dependencies {
     // With compose.desktop.common you will also lose @Preview functionality
     implementation(compose.desktop.currentOs)
 
-    implementation("org.postgresql:postgresql:42.7.0")
+    // See https://github.com/JetBrains/Jewel/releases for the release notes
+    implementation("org.jetbrains.jewel:jewel-int-ui-standalone:0.15.2")
+
+    // Optional, for custom decorated windows:
+    implementation("org.jetbrains.jewel:jewel-int-ui-decorated-window:0.15.2")
+
+    // Do not bring in Material (we use Jewel)
+    implementation(compose.desktop.currentOs) {
+        exclude(group = "org.jetbrains.compose.material")
+    }
+
+    implementation("org.postgresql:postgresql:42.7.3")
 
     implementation("org.jetbrains.compose.material3:material3-desktop:1.6.1")
     implementation("org.jetbrains.compose.components:components-splitpane-desktop:1.6.1")

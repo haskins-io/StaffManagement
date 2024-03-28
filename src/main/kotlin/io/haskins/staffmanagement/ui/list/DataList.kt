@@ -30,47 +30,52 @@ fun dataList(currentDetail: MutableState<ListItem>) {
     var expanded by remember { mutableStateOf(false) }
     var selected by remember { mutableStateOf(filterOptions[0]) }
 
-    Column {
-        Row {
-            ExposedDropdownMenuBox(
-                expanded = expanded,
-                onExpandedChange = {
-                    expanded = it
-                }
-            ) {
-                TextField(
-                    value = selected.name,
-                    onValueChange = {},
-                    readOnly = true,
-                    singleLine = true,
-                    trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
-                    modifier = Modifier.menuAnchor()
-                )
-
-                ExposedDropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false }
-                ) {
-                    filterOptions.forEach { item ->
-                        DropdownMenuItem(
-                            text = { Text(text = item.name) },
-                            onClick = {
-                                selected = item
-                                expanded = false
-                            },
-                            contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+    Scaffold(
+        content = {
+            Column {
+                Row {
+                    ExposedDropdownMenuBox(
+                        expanded = expanded,
+                        onExpandedChange = {
+                            expanded = it
+                        }
+                    ) {
+                        TextField(
+                            value = selected.name,
+                            onValueChange = {},
+                            readOnly = true,
+                            singleLine = true,
+                            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
+                            modifier = Modifier.menuAnchor()
                         )
+
+                        ExposedDropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false }
+                        ) {
+                            filterOptions.forEach { item ->
+                                DropdownMenuItem(
+                                    text = { Text(text = item.name) },
+                                    onClick = {
+                                        selected = item
+                                        expanded = false
+                                    },
+                                    contentPadding = ExposedDropdownMenuDefaults.ItemContentPadding
+                                )
+                            }
+                        }
                     }
+                }
+                Row {
+                    listBody(
+                        selected,
+                        currentDetail
+                    )
                 }
             }
         }
-        Row {
-            listBody(
-                selected,
-                currentDetail
-            )
-        }
-    }
+
+    )
 }
 
 @Composable
@@ -82,11 +87,10 @@ fun listBody(filter: ListFilter,
 
     when(filter.id) {
         FilterType.Projects.id -> data = ProjectDao.getInstance().projects()
-        FilterType.Departments.id -> data = DepartmentDao.getInstance().allDepartments()
+        FilterType.Departments.id -> data = DepartmentDao.getInstance().departmentHeads()
         FilterType.Managers.id -> data = ManagerDao.getInstance().managers()
         FilterType.Employees.id -> data = EmployeeDao.getInstance().employees()
     }
-
 
     LazyColumn {
         items(items = data) { row ->
@@ -95,11 +99,10 @@ fun listBody(filter: ListFilter,
                     currentDetail.value = row
                 }, contentAlignment = Alignment.CenterStart) {
                     ListItem(
-                        headlineContent = { Text(row.name) },
+                        headlineContent = { Text(row.name) }
                     )
                 }
             }
         }
     }
-
 }

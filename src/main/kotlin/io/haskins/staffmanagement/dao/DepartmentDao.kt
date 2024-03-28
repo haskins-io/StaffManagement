@@ -1,5 +1,6 @@
 package io.haskins.staffmanagement.dao
 
+import io.haskins.staffmanagement.dao.models.Departments
 import io.haskins.staffmanagement.dao.models.Employees
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.Employee
@@ -20,25 +21,48 @@ class DepartmentDao private constructor() {
         }
     }
 
-    fun allDepartments(): List<ListItem> {
+    fun departments(): List<ListItem> {
 
         val departments = mutableListOf<ListItem>()
 
         transaction {
 
-            val tmp = Employees
+            val tmp = Departments
                 .selectAll()
-                .where {
-                    Employees.departmentId.eq(0) and Employees.managerId.eq(0)
-                }
-                .orderBy(Employees.name)
+                .orderBy(Departments.name)
                 .toList()
 
             for (department in tmp) {
 
                 val item = ListItem(
-                    department[Employees.id],
-                    department[Employees.name],
+                    department[Departments.id],
+                    department[Departments.name],
+                    FilterType.Departments.id
+                )
+
+                departments.add(item)
+            }
+        }
+
+        return departments
+    }
+
+    fun departmentHeads(): List<ListItem> {
+
+        val departments = mutableListOf<ListItem>()
+
+        transaction {
+
+            val tmp = Departments
+                .selectAll()
+                .orderBy(Departments.name)
+                .toList()
+
+            for (department in tmp) {
+
+                val item = ListItem(
+                    department[Departments.head],
+                    department[Departments.name],
                     FilterType.Departments.id
                 )
 
