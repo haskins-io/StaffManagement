@@ -63,7 +63,7 @@ fun ProjectResources(currentDetail: MutableState<ListItem>) {
                 ) {
 
                     resources.forEach { resource ->
-                        if (isEditing.value) {
+                        if (isEditing.value && resource.id == selectedResource.value) {
                             row(modifier = Modifier) {
                                 cell { Text(text = resource.name) }
                                 cell { TextField(allocation, { allocation = it }) }
