@@ -1,11 +1,11 @@
 package io.haskins.staffmanagement.dao
 
 import io.haskins.staffmanagement.dao.models.Employees
-import io.haskins.staffmanagement.dao.models.ProjectEmployees
+import io.haskins.staffmanagement.dao.models.ProjectResources
 import io.haskins.staffmanagement.dao.models.Projects
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
-import io.haskins.staffmanagement.models.ProjectEmployee
+import io.haskins.staffmanagement.models.ProjectResource
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
@@ -45,38 +45,38 @@ class ProjectDao private constructor() {
         return projects
     }
 
-    fun projectResources(id: Int): List<ProjectEmployee> {
+    fun projectResources(id: Int): List<ProjectResource> {
 
-        val employees = mutableListOf<ProjectEmployee>()
+        val resources = mutableListOf<ProjectResource>()
 
         transaction {
 
-            val tmp = (ProjectEmployees innerJoin Employees)
-                .select(Employees.id, Employees.name, ProjectEmployees.allocation, ProjectEmployees.cost, ProjectEmployees.id)
+            val tmp = (ProjectResources innerJoin Employees)
+                .select(Employees.id, Employees.name, ProjectResources.allocation, ProjectResources.cost, ProjectResources.id)
                 .where {
-                    ProjectEmployees.projectId.eq(id)
+                    ProjectResources.projectId.eq(id)
                 }.toList()
 
             for (t in tmp) {
-                val employee = ProjectEmployee(
-                    t[ProjectEmployees.id],
+                val employee = ProjectResource(
+                    t[ProjectResources.id],
                     t[Employees.name],
-                    t[ProjectEmployees.allocation],
-                    t[ProjectEmployees.cost]
+                    t[ProjectResources.allocation],
+                    t[ProjectResources.cost]
                 )
 
-                employees.add(employee)
+                resources.add(employee)
             }
         }
 
-        return employees
+        return resources
     }
 
     fun allocateResource(projectId: Int, employeeId: Int, allocationPerc: Int) {
 
         transaction {
 
-            ProjectEmployees.insert {
+            ProjectResources.insert {
                 it[Employees.id] = employeeId
                 it[Projects.id] = projectId
                 it[allocation] = allocationPerc
@@ -87,13 +87,13 @@ class ProjectDao private constructor() {
 
     fun removeResource(allocationId: Int) {
         transaction {
-            ProjectEmployees.deleteWhere { id eq allocationId }
+            ProjectResources.deleteWhere { id eq allocationId }
         }
     }
 
     fun updateResource(allocationId: Int,  allocationPerc: Int) {
         transaction {
-            ProjectEmployees.update({ ProjectEmployees.id eq allocationId }) {
+            ProjectResources.update({ ProjectResources.id eq allocationId }) {
                 it[allocation] = allocationPerc
             }
         }

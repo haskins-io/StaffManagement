@@ -1,12 +1,11 @@
 package io.haskins.staffmanagement.dao
 
 import io.haskins.staffmanagement.dao.models.Employees
-import io.haskins.staffmanagement.dao.models.ProjectEmployees
+import io.haskins.staffmanagement.dao.models.ProjectResources
 import io.haskins.staffmanagement.dao.models.Projects
 import io.haskins.staffmanagement.enums.FilterType
-import io.haskins.staffmanagement.models.Employee
 import io.haskins.staffmanagement.models.ListItem
-import io.haskins.staffmanagement.models.ProjectEmployee
+import io.haskins.staffmanagement.models.ProjectResource
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -42,24 +41,24 @@ class EmployeeDao private constructor() {
         return employees
     }
 
-    fun projects(id: Int): List<ProjectEmployee> {
+    fun projects(id: Int): List<ProjectResource> {
 
-        val projects = mutableListOf<ProjectEmployee>()
+        val projects = mutableListOf<ProjectResource>()
 
         transaction {
 
-            val tmp = (Projects innerJoin ProjectEmployees)
-                .select(Projects.name, ProjectEmployees.allocation, ProjectEmployees.cost, ProjectEmployees.id)
+            val tmp = (Projects innerJoin ProjectResources)
+                .select(Projects.name, ProjectResources.allocation, ProjectResources.cost, ProjectResources.id)
                 .where {
-                    ProjectEmployees.employeeId.eq(id)
+                    ProjectResources.employeeId.eq(id)
                 }.toList()
 
             for (t in tmp) {
-                val employee = ProjectEmployee(
-                    t[ProjectEmployees.id],
+                val employee = ProjectResource(
+                    t[ProjectResources.id],
                     t[Projects.name],
-                    t[ProjectEmployees.allocation],
-                    t[ProjectEmployees.cost]
+                    t[ProjectResources.allocation],
+                    t[ProjectResources.cost]
                 )
 
                 projects.add(employee)

@@ -27,37 +27,46 @@ fun managerPanel(currentDetail: MutableState<ListItem>) {
 
     val vScrollState = rememberScrollState()
 
-    Box(modifier = Modifier.padding(10.dp).verticalScroll(vScrollState)) {
-        DataTable(
-            columns = {
-                headerBackground {
-                    Box(modifier = Modifier.background(color = Color.LightGray))
-                }
-                column { Text("Name") }
-            }
-        ) {
-            employees.forEach { employee ->
+    Column {
 
-                row(modifier = Modifier) {
+        Row {
+            Text(currentDetail.value.name)
+        }
 
-                    cell {
+        Row {
+            Box(modifier = Modifier.padding(10.dp).verticalScroll(vScrollState)) {
+                DataTable(
+                    columns = {
+                        headerBackground {
+                            Box(modifier = Modifier.background(color = Color.LightGray))
+                        }
+                        column { Text("Name") }
+                    }
+                ) {
+                    employees.forEach { employee ->
 
-                        if (employee.departmentId == employee.managerId) {
+                        row(modifier = Modifier) {
 
-                            Box(modifier = Modifier.clickable {
-                                currentDetail.value = ListItem(employee.id, employee.name, type= FilterType.Managers.id)
-                            }, contentAlignment = Alignment.CenterStart) {
-                                Row {
-                                    Icon(Icons.Filled.Person, "Manager")
-                                    Text(employee.name,)
+                            cell {
+
+                                if (employee.departmentId == employee.managerId) {
+
+                                    Box(modifier = Modifier.clickable {
+                                        currentDetail.value = ListItem(employee.id, employee.name, type= FilterType.Managers.id)
+                                    }, contentAlignment = Alignment.CenterStart) {
+                                        Row {
+                                            Icon(Icons.Filled.Person, "Manager")
+                                            Text(employee.name,)
+                                        }
+
+                                    }
+                                } else {
+                                    Box(modifier = Modifier.clickable {
+                                        currentDetail.value = ListItem(employee.id, employee.name, type= FilterType.Employees.id)
+                                    }, contentAlignment = Alignment.CenterStart) {
+                                        Text(employee.name)
+                                    }
                                 }
-
-                            }
-                        } else {
-                            Box(modifier = Modifier.clickable {
-                                currentDetail.value = ListItem(employee.id, employee.name, type= FilterType.Employees.id)
-                            }, contentAlignment = Alignment.CenterStart) {
-                                Text(employee.name)
                             }
                         }
                     }
@@ -65,4 +74,6 @@ fun managerPanel(currentDetail: MutableState<ListItem>) {
             }
         }
     }
+
+
 }

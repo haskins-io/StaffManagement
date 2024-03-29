@@ -11,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
+import io.github.windedge.table.RowsBuilder
 import io.haskins.staffmanagement.StaffManagementIcons
 import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.ui.components.ConfirmDialog
 import org.jetbrains.jewel.ui.component.*
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -22,14 +24,14 @@ fun ProjectResources(currentDetail: MutableState<ListItem>) {
 
     val resources = ProjectDao.getInstance().projectResources(currentDetail.value.id)
 
+    val allocation: MutableState<String> = remember { mutableStateOf("0") }
+
     val addingNew: MutableState<Boolean> = remember { mutableStateOf(false) }
 
-    val selectedResource = remember { mutableStateOf(0) }
+    val selectedResource: MutableState<Int> = remember { mutableStateOf(0) }
 
-    val isEditing = remember { mutableStateOf(false) }
+    val isEditing: MutableState<Boolean> = remember { mutableStateOf(false) }
     val deleteDialog = remember { mutableStateOf(false) }
-
-    var allocation by remember { mutableStateOf("0") }
 
     Column(modifier = Modifier.padding()) {
 
@@ -66,31 +68,14 @@ fun ProjectResources(currentDetail: MutableState<ListItem>) {
                         if (isEditing.value && resource.id == selectedResource.value) {
                             row(modifier = Modifier) {
                                 cell { Text(text = resource.name) }
-                                cell { TextField(allocation, { allocation = it }) }
+                                cell { TextField(allocation.value, { allocation.value = it }) }
                                 cell { Text(text = resource.cost.toString()) }
                                 cell {
-                                    Row(modifier = Modifier.align(alignment = Alignment.CenterEnd)) {
-                                        Tooltip({
-                                            Text("Save")
-                                        }) {
-                                            IconButton({
-                                                ProjectDao.getInstance().updateResource(selectedResource.value, allocation.toInt())
-                                                isEditing.value = false
-                                            }, modifier = Modifier.size(25.dp).padding(5.dp)) {
-                                                Icon("icons/check-2.svg", "Save", StaffManagementIcons::class.java)
-                                            }
-                                        }
-
-                                        Tooltip({
-                                            Text("Revert")
-                                        }) {
-                                            IconButton({
-                                                isEditing.value = false
-                                            }, modifier = Modifier.size(25.dp).padding(5.dp)) {
-                                                Icon("icons/remove-square.svg", "Revert", StaffManagementIcons::class.java)
-                                            }
-                                        }
-                                    }
+                                    EditResourceButtons(
+                                        isEditing,
+                                        selectedResource,
+                                        allocation
+                                    )
                                 }
                             }
                         } else {
@@ -99,30 +84,12 @@ fun ProjectResources(currentDetail: MutableState<ListItem>) {
                                 cell { Text(text = resource.allocation.toString()) }
                                 cell { Text(text = resource.cost.toString()) }
                                 cell {
-                                    Row(modifier = Modifier.align(alignment = Alignment.CenterEnd)) {
-                                        Tooltip({
-                                            Text("Edit")
-                                        }) {
-                                            IconButton({
-                                                allocation = resource.allocation.toString()
-                                                selectedResource.value = resource.id
-                                                isEditing.value = true
-                                            }, modifier = Modifier.size(25.dp).padding(5.dp)) {
-                                                Icon("icons/pencil-2.svg", "Edit", StaffManagementIcons::class.java)
-                                            }
-                                        }
-
-                                        Tooltip({
-                                            Text("Delete")
-                                        }) {
-                                            IconButton({
-                                                selectedResource.value = resource.id
-                                                deleteDialog.value = true
-                                            }, modifier = Modifier.size(25.dp).padding(5.dp)) {
-                                                Icon("icons/bin.svg", "Delete", StaffManagementIcons::class.java)
-                                            }
-                                        }
-                                    }
+                                    ViewResourceButtons(
+                                        resource,
+                                        deleteDialog,
+                                        isEditing,
+                                        selectedResource
+                                    )
                                 }
                             }
                         }
@@ -134,34 +101,15 @@ fun ProjectResources(currentDetail: MutableState<ListItem>) {
 
     if (deleteDialog.value && selectedResource.value > 0) {
 
-        AlertDialog(
-            onDismissRequest = {
+        ConfirmDialog(
+            title = "Remove Resource",
+            message = "Remove the resource from the Project",
+            confirm = {
+                ProjectDao.getInstance().removeResource(selectedResource.value)
                 deleteDialog.value = false
             },
-            title = {
-                Text(text = "Remove Resource")
-            },
-            text = {
-                Text(text = "Remove the resource from the Project")
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        ProjectDao.getInstance().removeResource(selectedResource.value)
-                        deleteDialog.value = false
-                    }
-                ) {
-                    Text("Confirm")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        deleteDialog.value = false
-                    }
-                ) {
-                    Text("Dismiss")
-                }
+            cancel = {
+                deleteDialog.value = false
             }
         )
     }

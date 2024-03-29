@@ -1,6 +1,6 @@
 package io.haskins.staffmanagement.models
 
-class ProjectEmployee(
+class ProjectResource(
     val id: Int,
     val name: String,
     val allocation: Int,

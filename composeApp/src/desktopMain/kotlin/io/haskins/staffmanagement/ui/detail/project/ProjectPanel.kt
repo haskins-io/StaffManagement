@@ -46,6 +46,10 @@ fun projectPanel(currentDetail: MutableState<ListItem>) {
         }
 
         Column(modifier = Modifier.fillMaxWidth()) {
+            Row {
+                Text(currentDetail.value.name)
+            }
+
             Row(verticalAlignment = Alignment.CenterVertically) {
                 TabStrip(tabs, modifier = Modifier.weight(1f))
             }

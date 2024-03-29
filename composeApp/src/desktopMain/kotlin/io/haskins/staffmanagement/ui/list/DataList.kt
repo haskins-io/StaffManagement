@@ -78,15 +78,21 @@ fun listBody(filter: ListFilter,
     }
 
     LazyColumn {
-        items(items = data) { row ->
+        items(items = data) {
+            row ->
             Column {
-                Row(modifier = Modifier.padding(5.dp)) {
-                    Box(modifier = Modifier.clickable {
-                        currentDetail.value = row
-                    }, contentAlignment = Alignment.CenterStart) {
-                        Text(row.name)
-                    }
+
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable {
+                            currentDetail.value = row
+                        }
+                        .padding(5.dp)
+                ) {
+                    Text(row.name)
                 }
+
                 Row {
                     Divider(Orientation.Horizontal, color = Color.LightGray, style = DividerStyle.light())
                 }
