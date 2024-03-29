@@ -9,10 +9,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import io.github.windedge.table.RowsBuilder
 import io.haskins.staffmanagement.StaffManagementIcons
 import io.haskins.staffmanagement.dao.ProjectDao
-import io.haskins.staffmanagement.models.ProjectResource
 import org.jetbrains.jewel.ui.component.*
 
 @OptIn(ExperimentalFoundationApi::class)

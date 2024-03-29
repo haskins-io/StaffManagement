@@ -1,9 +1,8 @@
 package io.haskins.staffmanagement.models
 
-class Manager(
+class Note(
     val id: Int,
-    val name: String,
-    val departmentId: Int
+    val title: String,
+    val note: String
 ) {
-
 }

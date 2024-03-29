@@ -1,17 +1,13 @@
 package io.haskins.staffmanagement.dao
 
-import io.haskins.staffmanagement.dao.models.Employees
-import io.haskins.staffmanagement.dao.models.ProjectResources
-import io.haskins.staffmanagement.dao.models.Projects
+import io.haskins.staffmanagement.dao.models.*
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.models.Note
 import io.haskins.staffmanagement.models.ProjectResource
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import org.jetbrains.exposed.sql.update
 
 class ProjectDao private constructor() {
 
@@ -45,7 +41,7 @@ class ProjectDao private constructor() {
         return projects
     }
 
-    fun projectResources(id: Int): List<ProjectResource> {
+    fun resources(id: Int): List<ProjectResource> {
 
         val resources = mutableListOf<ProjectResource>()
 
@@ -72,6 +68,34 @@ class ProjectDao private constructor() {
         return resources
     }
 
+    fun notes(id: Int): List<Note> {
+
+        val notes = mutableListOf<Note>()
+
+        transaction {
+
+            val tmp = ProjectNotes
+                .selectAll()
+                .where {
+                    ProjectNotes.projectId.eq(id)
+                }
+                .orderBy(ProjectNotes.date, order = SortOrder.ASC)
+                .toList()
+
+            for (t in tmp) {
+                val employee = Note(
+                    t[ProjectNotes.id],
+                    t[ProjectNotes.title],
+                    t[ProjectNotes.note]
+                )
+
+                notes.add(employee)
+            }
+        }
+
+        return notes
+    }
+
     fun allocateResource(projectId: Int, employeeId: Int, allocationPerc: Int) {
 
         transaction {
@@ -81,6 +105,17 @@ class ProjectDao private constructor() {
                 it[Projects.id] = projectId
                 it[allocation] = allocationPerc
                 it[cost] = 0f
+            }
+        }
+    }
+
+    fun addNote(projectId: Int, title: String, note: String) {
+        transaction {
+
+            ProjectNotes.insert {
+                it[ProjectNotes.projectId] = projectId
+                it[ProjectNotes.title] = title
+                it[ProjectNotes.note] = note
             }
         }
     }

@@ -11,7 +11,10 @@ import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 
 @Composable
-fun AllocateResource(addingNew: MutableState<Boolean>, projectId: Int) {
+fun AllocateResource(
+    addingNew: MutableState<Boolean>,
+    projectId: Int
+) {
 
     var allocation by remember { mutableStateOf("0") }
 

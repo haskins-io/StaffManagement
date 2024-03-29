@@ -58,9 +58,9 @@ create table projects
     budget      integer default 0                                           not null,
     status      integer default 0                                           not null,
     priority    integer default 0                                           not null,
-    due_date    date    default now()                                       not null,
     description text                                                        not null,
-    progress    integer default 0                                           not null
+    progress    integer default 0                                           not null,
+    due_date    integer default 0                                           not null
 );
 
 alter table projects
@@ -77,13 +77,15 @@ create table projectresources
         constraint projectresources_projects__fk
             references projects,
     allocation  integer,
-    start       date,
-    "end"       date,
     cost        real    default 0                                               not null,
     pr_id       integer default nextval('project_employee_pe_id_seq'::regclass) not null
         constraint projectresources_pk
-            primary key
+            primary key,
+    start       integer default 0                                               not null,
+    "end"       integer default 0                                               not null
 );
+
+comment on column projectresources.start is 'start';
 
 alter table projectresources
     owner to markhaskins;
@@ -128,7 +130,9 @@ create table employeeholidays
             primary key,
     employee_id integer
         constraint employees_holidays_employees__fk
-            references employees
+            references employees,
+    start       integer default 0                                                 not null,
+    "end"       integer default 0                                                 not null
 );
 
 alter table employeeholidays
@@ -139,9 +143,14 @@ alter sequence employees_holidays_eh_id_seq owned by employeeholidays.eh_id;
 create table projectnotes
 (
     pn_id      integer default nextval('project_notes_pn_id_seq'::regclass) not null
-        constraint project_notes_pk
+        constraint projectnotes_pk
             primary key,
     project_id integer
+        constraint projectnotes_projects__fk
+            references projects,
+    title      text,
+    note       text,
+    date       integer default 0                                            not null
 );
 
 alter table projectnotes
@@ -162,4 +171,20 @@ alter table departments
     owner to postgres;
 
 alter sequence department_department_id_seq owned by departments.department_id;
+
+create table employeenotes
+(
+    en_id       serial
+        constraint employeenotes_pk
+            primary key,
+    employee_id integer           not null
+        constraint employeenotes_employees__fk
+            references employees,
+    title       text,
+    note        text,
+    date        integer default 0 not null
+);
+
+alter table employeenotes
+    owner to postgres;
 

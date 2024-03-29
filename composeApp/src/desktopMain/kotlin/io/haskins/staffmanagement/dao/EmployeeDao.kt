@@ -1,11 +1,13 @@
 package io.haskins.staffmanagement.dao
 
-import io.haskins.staffmanagement.dao.models.Employees
-import io.haskins.staffmanagement.dao.models.ProjectResources
-import io.haskins.staffmanagement.dao.models.Projects
+import io.haskins.staffmanagement.dao.models.*
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.models.Note
 import io.haskins.staffmanagement.models.ProjectResource
+import org.jetbrains.exposed.sql.SortOrder
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -68,4 +70,42 @@ class EmployeeDao private constructor() {
         return projects
     }
 
+    fun notes(id: Int): List<Note> {
+
+        val notes = mutableListOf<Note>()
+
+        transaction {
+
+            val tmp = EmployeeNotes
+                .selectAll()
+                .where {
+                    EmployeeNotes.employeeId.eq(id)
+                }
+                .orderBy(EmployeeNotes.date, order = SortOrder.ASC)
+                .toList()
+
+            for (t in tmp) {
+                val employee = Note(
+                    t[EmployeeNotes.id],
+                    t[EmployeeNotes.title],
+                    t[EmployeeNotes.note]
+                )
+
+                notes.add(employee)
+            }
+        }
+
+        return notes
+    }
+
+    fun addNote(employeeId: Int, title: String, note: String) {
+        transaction {
+
+            EmployeeNotes.insert {
+                it[EmployeeNotes.employeeId] = employeeId
+                it[EmployeeNotes.title] = title
+                it[EmployeeNotes.note] = note
+            }
+        }
+    }
 }

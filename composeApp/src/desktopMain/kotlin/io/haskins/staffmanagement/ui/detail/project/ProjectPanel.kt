@@ -55,7 +55,7 @@ fun projectPanel(currentDetail: MutableState<ListItem>) {
             }
             when (selectedTabIndex) {
                 0 -> projectOverview()
-                1 -> ProjectNotes()
+                1 -> ProjectNotes(currentDetail)
                 2 -> ProjectResources(currentDetail)
             }
         }
