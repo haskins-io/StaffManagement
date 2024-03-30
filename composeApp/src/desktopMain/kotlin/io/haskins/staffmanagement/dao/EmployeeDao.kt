@@ -1,12 +1,14 @@
 package io.haskins.staffmanagement.dao
 
-import io.haskins.staffmanagement.dao.models.*
+import io.haskins.staffmanagement.dao.models.EmployeeNotes
+import io.haskins.staffmanagement.dao.models.Employees
+import io.haskins.staffmanagement.dao.models.ProjectResources
+import io.haskins.staffmanagement.dao.models.Projects
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
 import io.haskins.staffmanagement.models.Note
 import io.haskins.staffmanagement.models.ProjectResource
 import org.jetbrains.exposed.sql.SortOrder
-import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction

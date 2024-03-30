@@ -18,7 +18,7 @@ fun NotesView(notes: List<Note>) {
             column { Text("Note") }
         }
     ) {
-        notes.forEach() {note ->
+        notes.forEach { note ->
             row(modifier = Modifier) {
                 cell(Modifier.size(50.dp)) { Text(text = note.created.toString()) }
                 cell(Modifier.size(50.dp)) { Text(text = note.title) }

@@ -7,5 +7,4 @@ class Note(
     val title: String,
     val note: String,
     val created: LocalDate
-) {
-}
+)

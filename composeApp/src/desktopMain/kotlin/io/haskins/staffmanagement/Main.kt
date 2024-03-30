@@ -2,7 +2,6 @@ package io.haskins.staffmanagement
 
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.application
-import io.haskins.staffmanagement.ui.components.TitleBarView
 import io.haskins.staffmanagement.ui.components.twoColumnLayout
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.jewel.foundation.theme.JewelTheme

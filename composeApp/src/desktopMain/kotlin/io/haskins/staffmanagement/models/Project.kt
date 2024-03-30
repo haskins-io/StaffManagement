@@ -12,6 +12,4 @@ class Project(
     val priority: Int,
     val due: LocalDate,
     val progress: Int,
-) {
-
-}
+)

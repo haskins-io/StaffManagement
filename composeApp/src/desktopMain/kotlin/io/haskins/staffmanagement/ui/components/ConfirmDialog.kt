@@ -3,7 +3,6 @@ package io.haskins.staffmanagement.ui.components
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
-import io.haskins.staffmanagement.dao.ProjectDao
 import org.jetbrains.jewel.ui.component.Text
 
 @Composable

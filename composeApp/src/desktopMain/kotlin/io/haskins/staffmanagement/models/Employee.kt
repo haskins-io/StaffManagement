@@ -7,6 +7,4 @@ class Employee(
     val departmentId: Int,
     val rateId: Int,
     var isManager: Boolean
-) {
-
-}
+)

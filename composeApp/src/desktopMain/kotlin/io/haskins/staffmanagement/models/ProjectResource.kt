@@ -5,5 +5,4 @@ class ProjectResource(
     val name: String,
     val allocation: Int,
     val cost: Float
-) {
-}
+)

@@ -59,7 +59,7 @@ fun managerPanel(currentDetail: MutableState<ListItem>) {
                                     Box(modifier = Modifier.clickable {
                                         currentDetail.value = ListItem(employee.id, employee.name, type = filter)
                                     }, contentAlignment = Alignment.CenterStart) {
-                                        Text(employee.name,)
+                                        Text(employee.name)
                                     }
                                 }
                             }
