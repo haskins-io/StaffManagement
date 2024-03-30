@@ -39,10 +39,11 @@ create table employees
     manager_id      integer,
     name            text,
     rate_id         integer,
-    employee_id     integer default 0 not null
+    employee_id     integer default 0     not null
         constraint employees_pk
             primary key,
-    work_allocation integer default 0 not null
+    work_allocation integer default 0     not null,
+    is_manager      boolean default false not null
 );
 
 alter table employees
@@ -186,5 +187,13 @@ create table employeenotes
 );
 
 alter table employeenotes
+    owner to postgres;
+
+create table projecttasks
+(
+    pt_id serial
+);
+
+alter table projecttasks
     owner to postgres;
 

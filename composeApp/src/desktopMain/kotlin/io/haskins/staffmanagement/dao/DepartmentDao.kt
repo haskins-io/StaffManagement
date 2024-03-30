@@ -91,6 +91,7 @@ class DepartmentDao private constructor() {
                     t[Employees.managerId],
                     t[Employees.departmentId],
                     t[Employees.rateId],
+                    t[Employees.isManager]
                 )
 
                 employees.add(item)

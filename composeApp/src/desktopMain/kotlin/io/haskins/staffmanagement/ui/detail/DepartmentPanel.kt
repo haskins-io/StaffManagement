@@ -19,6 +19,7 @@ import io.github.windedge.table.DataTable
 import io.haskins.staffmanagement.dao.DepartmentDao
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.ui.components.DetailTitle
 
 @Composable
 fun departmentPanel(currentDetail: MutableState<ListItem>) {
@@ -27,43 +28,39 @@ fun departmentPanel(currentDetail: MutableState<ListItem>) {
 
     val vScrollState = rememberScrollState()
 
-    Column {
-        Row {
-            Text(currentDetail.value.name)
-        }
+    if (currentDetail.value.id == 0) {
+        Text("Select a Department")
+    } else {
+        Column {
+            DetailTitle(currentDetail.value.name)
 
-        Row {
-            Box(modifier = Modifier.padding(10.dp).verticalScroll(vScrollState)) {
-                DataTable(
-                    columns = {
-                        headerBackground {
-                            Box(modifier = Modifier.background(color = Color.LightGray))
+            Row {
+                Box(modifier = Modifier.padding(10.dp).verticalScroll(vScrollState)) {
+                    DataTable(
+                        columns = {
+                            column { Text("") }
+                            column { Text("Name") }
                         }
-                        column { Text("Name") }
-                    }
-                ) {
-                    employees.forEach { employee ->
+                    ) {
+                        employees.forEach { employee ->
 
-                        row(modifier = Modifier) {
+                            var filter = FilterType.Employees.id
 
-                            cell {
+                            row(modifier = Modifier) {
 
-                                if (employee.departmentId == employee.managerId) {
-
-                                    Box(modifier = Modifier.clickable {
-                                        currentDetail.value = ListItem(employee.id, employee.name, type= FilterType.Managers.id)
-                                    }, contentAlignment = Alignment.CenterStart) {
-                                        Row {
-                                            Icon(Icons.Filled.Person, "Manager")
-                                            Text(employee.name,)
-                                        }
-
+                                cell {
+                                    if (employee.isManager) {
+                                        filter = FilterType.Managers.id
+                                        Icon(Icons.Filled.Person, "Manager")
                                     }
-                                } else {
+                                }
+
+                                cell {
                                     Box(modifier = Modifier.clickable {
-                                        currentDetail.value = ListItem(employee.id, employee.name, type= FilterType.Employees.id)
+                                        currentDetail.value =
+                                            ListItem(employee.id, employee.name, type = filter)
                                     }, contentAlignment = Alignment.CenterStart) {
-                                        Text(employee.name)
+                                        Text(employee.name,)
                                     }
                                 }
                             }

@@ -16,7 +16,8 @@ import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
 @Composable
 fun twoColumnLayout() {
 
-    val currentDetail: MutableState<ListItem> = remember { mutableStateOf(ListItem(0,"",1)) };
+    val currentDetail: MutableState<ListItem> = remember { mutableStateOf(ListItem(0,"",1)) }
+
     Surface(
         color = Color.White,
     ) {

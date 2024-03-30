@@ -10,6 +10,8 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.time.Instant
+import java.time.ZoneId
 
 class EmployeeDao private constructor() {
 
@@ -85,10 +87,14 @@ class EmployeeDao private constructor() {
                 .toList()
 
             for (t in tmp) {
+                val instant = Instant.ofEpochMilli(t[EmployeeNotes.date].toLong())
+                val zoneId = ZoneId.systemDefault()
+
                 val employee = Note(
                     t[EmployeeNotes.id],
                     t[EmployeeNotes.title],
-                    t[EmployeeNotes.note]
+                    t[EmployeeNotes.note],
+                    instant.atZone(zoneId).toLocalDate(),
                 )
 
                 notes.add(employee)

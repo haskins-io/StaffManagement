@@ -4,10 +4,15 @@ import io.haskins.staffmanagement.dao.models.*
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
 import io.haskins.staffmanagement.models.Note
+import io.haskins.staffmanagement.models.Project
 import io.haskins.staffmanagement.models.ProjectResource
+import java.time.LocalDate
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.time.Instant
+import java.time.ZoneId
+
 
 class ProjectDao private constructor() {
 
@@ -41,6 +46,42 @@ class ProjectDao private constructor() {
         return projects
     }
 
+    fun project(id: Int): Project {
+
+        var project= Project(
+            0,
+            "",
+            "",
+            "",
+            0,
+            0,
+            0,
+            LocalDate.now(),
+            0
+        )
+
+        transaction {
+            val t = Projects.selectAll().where { Projects.id.eq(id) }.single()
+
+            val instant = Instant.ofEpochMilli(t[Projects.due].toLong())
+            val zoneId = ZoneId.systemDefault()
+
+            project = Project(
+                t[Projects.id],
+                t[Projects.name],
+                t[Projects.description],
+                t[Projects.code],
+                t[Projects.budget],
+                t[Projects.status],
+                t[Projects.priority],
+                instant.atZone(zoneId).toLocalDate(),
+                t[Projects.progress],
+            )
+        }
+
+        return project
+    }
+
     fun resources(id: Int): List<ProjectResource> {
 
         val resources = mutableListOf<ProjectResource>()
@@ -51,7 +92,9 @@ class ProjectDao private constructor() {
                 .select(Employees.id, Employees.name, ProjectResources.allocation, ProjectResources.cost, ProjectResources.id)
                 .where {
                     ProjectResources.projectId.eq(id)
-                }.toList()
+                }
+                .orderBy(Employees.name)
+                .toList()
 
             for (t in tmp) {
                 val employee = ProjectResource(
@@ -74,6 +117,8 @@ class ProjectDao private constructor() {
 
         transaction {
 
+
+
             val tmp = ProjectNotes
                 .selectAll()
                 .where {
@@ -83,10 +128,14 @@ class ProjectDao private constructor() {
                 .toList()
 
             for (t in tmp) {
+                val instant = Instant.ofEpochMilli(t[ProjectNotes.date].toLong())
+                val zoneId = ZoneId.systemDefault()
+
                 val employee = Note(
                     t[ProjectNotes.id],
                     t[ProjectNotes.title],
-                    t[ProjectNotes.note]
+                    t[ProjectNotes.note],
+                    instant.atZone(zoneId).toLocalDate(),
                 )
 
                 notes.add(employee)

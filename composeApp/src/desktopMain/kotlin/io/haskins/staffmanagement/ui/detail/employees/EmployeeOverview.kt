@@ -37,9 +37,6 @@ fun employeeOverview(currentDetail: MutableState<ListItem>) {
     Box(modifier = Modifier.padding(10.dp).verticalScroll(vScrollState)) {
         DataTable(
             columns = {
-                headerBackground {
-                    Box(modifier = Modifier.background(color = Color.LightGray))
-                }
                 column { Text("Name") }
                 column { Text("Allocation") }
                 column { Text("Cost") }

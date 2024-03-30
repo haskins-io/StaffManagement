@@ -29,7 +29,7 @@ class ManagerDao private constructor(){
             val tmp = Employees
                 .selectAll()
                 .where {
-                    Employees.departmentId.eq(Employees.managerId)
+                    Employees.isManager eq true
                 }
                 .orderBy(Employees.name)
                 .toList()
@@ -66,6 +66,7 @@ class ManagerDao private constructor(){
                     t[Employees.managerId],
                     t[Employees.departmentId],
                     t[Employees.rateId],
+                    t[Employees.isManager]
                 )
 
                 employees.add(item)

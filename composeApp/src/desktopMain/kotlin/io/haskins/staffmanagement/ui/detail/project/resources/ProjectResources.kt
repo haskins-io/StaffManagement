@@ -11,6 +11,8 @@ import io.haskins.staffmanagement.ui.components.ConfirmDialog
 @Composable
 fun ProjectResources(currentDetail: MutableState<ListItem>) {
 
+    val resources = ProjectDao.getInstance().resources(currentDetail.value.id)
+
     val addingNew: MutableState<Boolean> = remember { mutableStateOf(false) }
     val selectedResource: MutableState<Int> = remember { mutableStateOf(0) }
     val deleteDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
@@ -22,9 +24,10 @@ fun ProjectResources(currentDetail: MutableState<ListItem>) {
         } else {
 
             ViewResources(
-                currentDetail,
                 addingNew,
-                deleteDialog
+                deleteDialog,
+                selectedResource,
+                resources
             )
         }
     }

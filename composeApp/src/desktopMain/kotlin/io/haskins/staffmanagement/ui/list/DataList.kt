@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
@@ -44,7 +43,10 @@ fun dataList(currentDetail: MutableState<ListItem>) {
                     filterOptions.forEach { item ->
                         selectableItem(
                             selected = selected == item,
-                            onClick = { selected = item },
+                            onClick = {
+                                selected = item
+                                currentDetail.value = ListItem(0, "", item.id)
+                            },
                         ) {
                             Text(item.name)
                         }

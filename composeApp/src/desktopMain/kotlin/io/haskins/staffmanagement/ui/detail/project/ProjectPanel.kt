@@ -3,6 +3,7 @@ package io.haskins.staffmanagement.ui.detail.project
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
@@ -11,7 +12,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.ui.components.DetailTitle
 import io.haskins.staffmanagement.ui.detail.project.resources.ProjectResources
 import org.jetbrains.jewel.ui.component.SimpleTabContent
 import org.jetbrains.jewel.ui.component.TabData
@@ -23,7 +26,7 @@ fun projectPanel(currentDetail: MutableState<ListItem>) {
 
     var selectedTabIndex by remember { mutableStateOf(0) }
 
-    val theTabs = listOf("Overview", "Notes", "Resources")
+    val theTabs = listOf("Overview", "Tasks","Notes", "Resources")
     val tabs = mutableListOf<TabData>()
 
     if (currentDetail.value.id == 0) {
@@ -46,17 +49,16 @@ fun projectPanel(currentDetail: MutableState<ListItem>) {
         }
 
         Column(modifier = Modifier.fillMaxWidth()) {
-            Row {
-                Text(currentDetail.value.name)
-            }
+            DetailTitle(currentDetail.value.name)
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 TabStrip(tabs, modifier = Modifier.weight(1f))
             }
             when (selectedTabIndex) {
-                0 -> projectOverview()
-                1 -> ProjectNotes(currentDetail)
-                2 -> ProjectResources(currentDetail)
+                0 -> projectOverview(currentDetail)
+                1 -> ProjectTasks(currentDetail)
+                2 -> ProjectNotes(currentDetail)
+                3 -> ProjectResources(currentDetail)
             }
         }
     }
