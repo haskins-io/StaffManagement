@@ -14,7 +14,7 @@ object Projects: Table() {
     val cost: Column<Int> = integer("cost")
     val status: Column<Int> = integer("status")
     val priority: Column<Int> = integer("priority")
-    val due: Column<Int> = integer("due_date")
+    val due: Column<Long> = long("due_date")
     val progress: Column<Int> = integer("progress")
 
     override val primaryKey = PrimaryKey(id, name="projects_pk")

@@ -61,7 +61,8 @@ create table projects
     priority    integer default 0                                           not null,
     description text                                                        not null,
     progress    integer default 0                                           not null,
-    due_date    integer default 0                                           not null
+    due_date    bigint  default 0                                           not null,
+    cost        integer default 0                                           not null
 );
 
 alter table projects
@@ -82,8 +83,8 @@ create table projectresources
     pr_id       integer default nextval('project_employee_pe_id_seq'::regclass) not null
         constraint projectresources_pk
             primary key,
-    start       integer default 0                                               not null,
-    "end"       integer default 0                                               not null
+    start       bigint  default 0                                               not null,
+    "end"       bigint  default 0                                               not null
 );
 
 comment on column projectresources.start is 'start';
@@ -132,8 +133,8 @@ create table employeeholidays
     employee_id integer
         constraint employees_holidays_employees__fk
             references employees,
-    start       integer default 0                                                 not null,
-    "end"       integer default 0                                                 not null
+    start       bigint  default 0                                                 not null,
+    "end"       bigint  default 0                                                 not null
 );
 
 alter table employeeholidays
@@ -151,7 +152,7 @@ create table projectnotes
             references projects,
     title      text,
     note       text,
-    date       integer default 0                                            not null
+    date       bigint  default 0                                            not null
 );
 
 alter table projectnotes
@@ -178,12 +179,12 @@ create table employeenotes
     en_id       serial
         constraint employeenotes_pk
             primary key,
-    employee_id integer           not null
+    employee_id integer          not null
         constraint employeenotes_employees__fk
             references employees,
     title       text,
     note        text,
-    date        integer default 0 not null
+    date        bigint default 0 not null
 );
 
 alter table employeenotes
