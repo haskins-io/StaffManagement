@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.models.ListItem
-import io.haskins.staffmanagement.ui.components.AddButtonRow
+import io.haskins.staffmanagement.ui.components.buttonrows.AddButtonRow
 import io.haskins.staffmanagement.ui.components.notes.AddNote
 import io.haskins.staffmanagement.ui.components.notes.NotesView
 

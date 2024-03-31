@@ -10,7 +10,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.haskins.staffmanagement.models.ListItem
-import io.haskins.staffmanagement.ui.components.AddButtonRow
+import io.haskins.staffmanagement.ui.components.buttonrows.AddButtonRow
 
 @Composable
 fun employeeHolidays(currentDetail: MutableState<ListItem>) {

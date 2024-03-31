@@ -5,6 +5,6 @@ class Employee(
     val name: String,
     val managerId: Int,
     val departmentId: Int,
-    val rateId: Int,
+    val rate: Int,
     var isManager: Boolean
 )

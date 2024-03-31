@@ -13,7 +13,6 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
 import java.time.ZoneId
-import java.time.ZoneOffset
 
 class ProjectDao private constructor() {
 
@@ -26,6 +25,10 @@ class ProjectDao private constructor() {
             instance ?: ProjectDao().also { instance = it}
         }
     }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Projects
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     fun projectsList(): List<ListItem> {
 
@@ -80,7 +83,7 @@ class ProjectDao private constructor() {
 
     fun project(id: Int): Project {
 
-        var project= Project(
+        var project = Project(
             0,
             "",
             "",
@@ -130,14 +133,17 @@ class ProjectDao private constructor() {
         }
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Resources
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     fun resources(id: Int): List<ProjectResource> {
 
         val resources = mutableListOf<ProjectResource>()
 
         transaction {
 
-            val tmp = (ProjectResources innerJoin Employees)
-                .select(Employees.id, Employees.name, ProjectResources.allocation, ProjectResources.cost, ProjectResources.id)
+            val tmp = (ProjectResources innerJoin Employees innerJoin Rates)
+                .selectAll()
                 .where {
                     ProjectResources.projectId.eq(id)
                 }
@@ -147,9 +153,15 @@ class ProjectDao private constructor() {
             for (t in tmp) {
                 val employee = ProjectResource(
                     t[ProjectResources.id],
+                    t[ProjectResources.projectId],
+                    t[Employees.id],
                     t[Employees.name],
+                    t[Employees.rateId],
+                    t[Rates.name],
                     t[ProjectResources.allocation],
-                    t[ProjectResources.cost]
+                    t[ProjectResources.cost],
+                    DateUtils.epochToLocalDate(t[ProjectResources.start]),
+                    DateUtils.epochToLocalDate(t[ProjectResources.end]),
                 )
 
                 resources.add(employee)
@@ -159,6 +171,50 @@ class ProjectDao private constructor() {
         return resources
     }
 
+    fun allocateResource(projectId: Int, employeeId: Int, allocationPerc: Int) {
+
+        transaction {
+
+            val employeeCost = employeeCost(employeeId, allocationPerc)
+
+            ProjectResources.insert {
+                it[Employees.id] = employeeId
+                it[Projects.id] = projectId
+                it[allocation] = allocationPerc
+                it[cost] = employeeCost
+            }
+
+            updateProjectCost(projectId)
+        }
+    }
+
+    fun removeResource(allocationId: Int) {
+        transaction {
+            ProjectResources.deleteWhere { id eq allocationId }
+        }
+    }
+
+    fun updateResource(resource: ProjectResource,  allocationPerc: Int) {
+
+        transaction {
+
+            // calculate employee cost based on allocation
+            val employeeCost = employeeCost(resource.employeeId, allocationPerc)
+
+            ProjectResources.update({ ProjectResources.id eq resource.id }) {
+                it[allocation] = allocationPerc
+                it[cost] = employeeCost
+            }
+
+            // now get all resources for project and sum up cost
+            updateProjectCost(resource.projectId)
+        }
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Notes
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     fun notes(id: Int): List<Note> {
 
         val notes = mutableListOf<Note>()
@@ -191,19 +247,6 @@ class ProjectDao private constructor() {
         return notes
     }
 
-    fun allocateResource(projectId: Int, employeeId: Int, allocationPerc: Int) {
-
-        transaction {
-
-            ProjectResources.insert {
-                it[Employees.id] = employeeId
-                it[Projects.id] = projectId
-                it[allocation] = allocationPerc
-                it[cost] = 0f
-            }
-        }
-    }
-
     fun addNote(projectId: Int, title: String, note: String) {
         transaction {
 
@@ -215,16 +258,25 @@ class ProjectDao private constructor() {
         }
     }
 
-    fun removeResource(allocationId: Int) {
-        transaction {
-            ProjectResources.deleteWhere { id eq allocationId }
-        }
+    private fun employeeCost(employeeId: Int, allocation: Int): Float {
+
+        val employee = EmployeeDao.getInstance().employee(employeeId)
+        val rate: Float = (employee.rate.toFloat()) / 100f
+        return rate * allocation
     }
 
-    fun updateResource(allocationId: Int,  allocationPerc: Int) {
+    private fun updateProjectCost(projectId: Int) {
+
+        var projectCost = 0f
+        val resources = resources(projectId)
+        for (r in resources) {
+            projectCost += r.cost
+        }
+
         transaction {
-            ProjectResources.update({ ProjectResources.id eq allocationId }) {
-                it[allocation] = allocationPerc
+
+            Projects.update( { Projects.id eq projectId } ) {
+                it[cost] = projectCost.toInt()
             }
         }
     }

@@ -1,14 +1,13 @@
 package io.haskins.staffmanagement.ui.detail.project.resources
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import io.github.windedge.table.DataTable
+import io.github.windedge.table.RowBuilderImpl
 import io.haskins.staffmanagement.models.dao.ProjectResource
-import io.haskins.staffmanagement.ui.components.AddButtonRow
+import io.haskins.staffmanagement.ui.components.buttonrows.AddButtonRow
+import io.haskins.staffmanagement.utils.FormatUtils
 import org.jetbrains.jewel.ui.component.*
 
 @Composable
@@ -18,7 +17,6 @@ fun ColumnScope.ViewResources(
     selectedResource: MutableState<Int>,
     resources: List<ProjectResource>
 ) {
-
     val allocation: MutableState<String> = remember { mutableStateOf("0") }
 
     val isEditing: MutableState<Boolean> = remember { mutableStateOf(false) }
@@ -33,6 +31,7 @@ fun ColumnScope.ViewResources(
             columns = {
                 column { Text("Name") }
                 column { Text("Allocation") }
+                column { Text("Rate") }
                 column { Text("Cost") }
                 column { Text("") }
             }
@@ -41,19 +40,27 @@ fun ColumnScope.ViewResources(
             resources.forEach { resource ->
 
                 row(modifier = Modifier) {
+
                     cell { Text(text = resource.name) }
 
-                    if (isEditing.value && resource.id == selectedResource.value) {
-                        cell { TextField(allocation.value, { allocation.value = it }) }
-                    } else {
-                        cell { Text(text = resource.allocation.toString()) }
+                    cell {
+                        AllocationView(
+                            allocation,
+                            isEditing,
+                            resource,
+                            selectedResource
+                        )
                     }
 
-                    cell { Text(text = resource.cost.toString()) }
+                    cell { Text(text = resource.rateName) }
+
+                    cell { Text(text = FormatUtils.formatCurrency(resource.cost)) }
+
                     cell {
                         if (isEditing.value && resource.id == selectedResource.value) {
                             EditResourceButtons(
                                 isEditing,
+                                resource,
                                 selectedResource,
                                 allocation
                             )
@@ -69,5 +76,25 @@ fun ColumnScope.ViewResources(
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun AllocationView(
+    allocation: MutableState<String>,
+    isEditing: MutableState<Boolean>,
+    resource: ProjectResource,
+    selectedResource: MutableState<Int>
+) {
+
+    val localState: MutableState<String> = remember { mutableStateOf(resource.allocation.toString()) }
+
+    if (isEditing.value && resource.id == selectedResource.value) {
+       TextField(localState.value, {
+           localState.value = it
+           allocation.value = it
+       })
+    } else {
+        Text(text = localState.value)
     }
 }

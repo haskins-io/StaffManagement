@@ -26,10 +26,11 @@ Crud the things
 ### Projects
 * ~~employees to projects~~
 * ~~notes / Comments~~
-* budget
-* Status - Red/Amber/Green
-* Priority
-* Due Date
+* ~~budget~~
+* ~~Status - Red/Amber/Green~~
+* ~~Priority~~
+* ~~Due Date~~
+* ~~Cost~~
 * background information about project. Where did it comes. Why are we doing this, etc?
 * tasks to project
 * Project Team?

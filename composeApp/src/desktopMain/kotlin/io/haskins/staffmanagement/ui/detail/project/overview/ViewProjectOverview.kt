@@ -6,9 +6,10 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import io.github.windedge.table.DataTable
 import io.haskins.staffmanagement.models.dao.Project
-import io.haskins.staffmanagement.ui.components.EditButtonRow
+import io.haskins.staffmanagement.ui.components.buttonrows.EditButtonRow
 import io.haskins.staffmanagement.ui.components.project.ProjectPriorityView
 import io.haskins.staffmanagement.ui.components.project.ProjectStatusView
+import io.haskins.staffmanagement.utils.FormatUtils
 import org.jetbrains.jewel.ui.component.Text
 
 @Composable
@@ -40,12 +41,12 @@ fun ColumnScope.ViewProjectOverview(project: Project, editing: MutableState<Bool
 
         row(modifier = Modifier) {
             cell { Text(text = "Budget") }
-            cell { Text(text = project.budget.toString()) }
+            cell { Text(text = FormatUtils.formatCurrency(project.budget)) }
         }
 
         row(modifier = Modifier) {
             cell { Text(text = "Cost") }
-            cell { Text(text = project.cost.toString()) }
+            cell { Text(text = FormatUtils.formatCurrency(project.cost)) }
         }
 
         row(modifier = Modifier) {

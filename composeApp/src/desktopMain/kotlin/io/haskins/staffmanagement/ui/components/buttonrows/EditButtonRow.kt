@@ -1,4 +1,4 @@
-package io.haskins.staffmanagement.ui.components
+package io.haskins.staffmanagement.ui.components.buttonrows
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.ColumnScope
@@ -18,9 +18,9 @@ import org.jetbrains.jewel.ui.component.Tooltip
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ColumnScope.AddButtonRow(
+fun ColumnScope.EditButtonRow(
     toolTip: String,
-    addingNew: MutableState<Boolean>
+    editing: MutableState<Boolean>
 ) {
 
     Row(Modifier.align(Alignment.End).padding(end = 10.dp)) {
@@ -28,9 +28,9 @@ fun ColumnScope.AddButtonRow(
             Text(toolTip)
         }) {
             IconButton({
-                addingNew.value = true
+                editing.value = true
             }, modifier = Modifier.size(25.dp).padding(5.dp)) {
-                Icon("icons/add.svg", toolTip, StaffManagementIcons::class.java)
+                Icon("icons/pencil-2.svg", toolTip, StaffManagementIcons::class.java)
             }
         }
     }

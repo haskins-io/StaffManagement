@@ -1,13 +1,12 @@
 package io.haskins.staffmanagement.dao
 
-import io.haskins.staffmanagement.dao.models.EmployeeNotes
-import io.haskins.staffmanagement.dao.models.Employees
-import io.haskins.staffmanagement.dao.models.ProjectResources
-import io.haskins.staffmanagement.dao.models.Projects
+import io.haskins.staffmanagement.dao.models.*
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.models.dao.Employee
 import io.haskins.staffmanagement.models.dao.Note
 import io.haskins.staffmanagement.models.dao.ProjectResource
+import io.haskins.staffmanagement.utils.DateUtils
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
@@ -47,7 +46,38 @@ class EmployeeDao private constructor() {
         return employees
     }
 
-    fun projects(id: Int): List<ProjectResource> {
+    fun employee(employeeId: Int): Employee {
+
+        var employee = Employee (
+            0,
+            "",
+            0,
+            0,
+            0,
+            false
+        )
+
+        transaction {
+
+            val t = (Employees innerJoin Rates)
+                .selectAll()
+                .where { Employees.id.eq(employeeId) }
+                .single()
+
+            employee = Employee (
+                t[Employees.id],
+                t[Employees.name],
+                t[Employees.managerId],
+                t[Employees.departmentId],
+                t[Rates.daily],
+                t[Employees.isManager]
+            )
+        }
+
+        return employee
+    }
+
+    fun projects(employeeId: Int): List<ProjectResource> {
 
         val projects = mutableListOf<ProjectResource>()
 
@@ -56,15 +86,21 @@ class EmployeeDao private constructor() {
             val tmp = (Projects innerJoin ProjectResources)
                 .select(Projects.name, ProjectResources.allocation, ProjectResources.cost, ProjectResources.id)
                 .where {
-                    ProjectResources.employeeId.eq(id)
+                    ProjectResources.employeeId.eq(employeeId)
                 }.toList()
 
             for (t in tmp) {
                 val employee = ProjectResource(
                     t[ProjectResources.id],
+                    0,
+                    0,
                     t[Projects.name],
+                    0,
+                    "",
                     t[ProjectResources.allocation],
-                    t[ProjectResources.cost]
+                    0f,
+                    DateUtils.epochToLocalDate(0),
+                    DateUtils.epochToLocalDate(0)
                 )
 
                 projects.add(employee)
@@ -74,6 +110,9 @@ class EmployeeDao private constructor() {
         return projects
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Notes
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     fun notes(id: Int): List<Note> {
 
         val notes = mutableListOf<Note>()

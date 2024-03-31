@@ -17,9 +17,10 @@ import io.github.windedge.table.DataTable
 import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
-import io.haskins.staffmanagement.ui.components.AddButtonRow
+import io.haskins.staffmanagement.ui.components.buttonrows.AddButtonRow
 import io.haskins.staffmanagement.ui.components.project.ProjectPriorityView
 import io.haskins.staffmanagement.ui.components.project.ProjectStatusView
+import io.haskins.staffmanagement.utils.FormatUtils
 import org.jetbrains.jewel.ui.component.Text
 
 @Composable
@@ -66,8 +67,8 @@ fun ProjectsOverview(currentDetail: MutableState<ListItem>) {
                                 }
                             ) {
                                 cell { Text(text = project.name) }
-                                cell { Text(text = project.budget.toString()) }
-                                cell { Text(text = project.cost.toString()) }
+                                cell { Text(text = FormatUtils.formatCurrency(project.budget)) }
+                                cell { Text(text = FormatUtils.formatCurrency(project.cost)) }
                                 cell { ProjectStatusView(project.status) }
                                 cell { ProjectPriorityView(project.priority) }
                                 cell { Text(text = project.progress.toString()) }
