@@ -3,16 +3,17 @@ package io.haskins.staffmanagement.dao
 import io.haskins.staffmanagement.dao.models.*
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
-import io.haskins.staffmanagement.models.Note
-import io.haskins.staffmanagement.models.Project
-import io.haskins.staffmanagement.models.ProjectResource
+import io.haskins.staffmanagement.models.dao.Note
+import io.haskins.staffmanagement.models.dao.Project
+import io.haskins.staffmanagement.models.dao.ProjectResource
+import io.haskins.staffmanagement.utils.DateUtils
 import java.time.LocalDate
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
 import java.time.ZoneId
-
+import java.time.ZoneOffset
 
 class ProjectDao private constructor() {
 
@@ -26,7 +27,7 @@ class ProjectDao private constructor() {
         }
     }
 
-    fun projects(): List<ListItem> {
+    fun projectsList(): List<ListItem> {
 
         val projects = mutableListOf<ListItem>()
 
@@ -46,6 +47,37 @@ class ProjectDao private constructor() {
         return projects
     }
 
+    fun projects(): List<Project> {
+
+        val projects = mutableListOf<Project>()
+
+        transaction {
+
+            for (t in Projects.selectAll().orderBy(Projects.name)) {
+
+                val instant = Instant.ofEpochMilli(t[Projects.due].toLong())
+                val zoneId = ZoneId.systemDefault()
+
+                val project = Project(
+                    t[Projects.id],
+                    t[Projects.name],
+                    t[Projects.description],
+                    t[Projects.code],
+                    t[Projects.budget],
+                    t[Projects.cost],
+                    t[Projects.status],
+                    t[Projects.priority],
+                    instant.atZone(zoneId).toLocalDate(),
+                    t[Projects.progress],
+                )
+
+                projects.add(project)
+            }
+        }
+
+        return projects
+    }
+
     fun project(id: Int): Project {
 
         var project= Project(
@@ -56,6 +88,7 @@ class ProjectDao private constructor() {
             0,
             0,
             0,
+            0,
             LocalDate.now(),
             0
         )
@@ -63,23 +96,38 @@ class ProjectDao private constructor() {
         transaction {
             val t = Projects.selectAll().where { Projects.id.eq(id) }.single()
 
-            val instant = Instant.ofEpochMilli(t[Projects.due].toLong())
-            val zoneId = ZoneId.systemDefault()
-
             project = Project(
                 t[Projects.id],
                 t[Projects.name],
                 t[Projects.description],
                 t[Projects.code],
                 t[Projects.budget],
+                t[Projects.cost],
                 t[Projects.status],
                 t[Projects.priority],
-                instant.atZone(zoneId).toLocalDate(),
+                DateUtils.epochToLocalDate(t[Projects.due]),
                 t[Projects.progress],
             )
         }
 
         return project
+    }
+
+    fun update(project: Project) {
+
+        transaction {
+
+            Projects.update( { Projects.id eq project.id } ) {
+                it[name] = project.name
+                it[description] = project.description
+                it[code] = project.code
+                it[budget] = project.budget
+                it[status] = project.status
+                it[priority] = project.priority
+                it[due] = DateUtils.localDateToEpoch(project.due)
+                it[progress] = project.progress
+            }
+        }
     }
 
     fun resources(id: Int): List<ProjectResource> {
@@ -116,8 +164,6 @@ class ProjectDao private constructor() {
         val notes = mutableListOf<Note>()
 
         transaction {
-
-
 
             val tmp = ProjectNotes
                 .selectAll()

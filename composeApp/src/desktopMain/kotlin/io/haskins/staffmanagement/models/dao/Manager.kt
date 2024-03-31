@@ -1,4 +1,4 @@
-package io.haskins.staffmanagement.models
+package io.haskins.staffmanagement.models.dao
 
 class Manager(
     val id: Int,

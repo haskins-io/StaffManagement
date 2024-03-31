@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.models.ListItem
 import io.haskins.staffmanagement.ui.components.AddButtonRow
@@ -18,7 +19,7 @@ fun ProjectNotes(currentDetail: MutableState<ListItem>) {
 
     val addingNew: MutableState<Boolean> = remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.padding()) {
+    Column(modifier = Modifier.padding(10.dp)) {
 
         if (addingNew.value) {
 

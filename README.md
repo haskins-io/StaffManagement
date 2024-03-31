@@ -18,7 +18,7 @@ full schema file at this point, as I'm still developing this, and things might c
 The JetBrains Exposed framework is being used to communicate with the databases.
 
 #### Theme
-I'm using the Jetbrains Jewel stand-a-lone theme to try and make it look like a Jetbrains application.
+I'm using the Jetbrains Jewel stand-alone theme to try and make it look like a Jetbrains application.
 
 ## Things to do
 Crud the things

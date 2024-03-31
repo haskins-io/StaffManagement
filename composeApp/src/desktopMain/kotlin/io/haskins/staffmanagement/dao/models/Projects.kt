@@ -11,6 +11,7 @@ object Projects: Table() {
     val code : Column<String> = varchar("code", length = 100)
 
     val budget: Column<Int> = integer("budget")
+    val cost: Column<Int> = integer("cost")
     val status: Column<Int> = integer("status")
     val priority: Column<Int> = integer("priority")
     val due: Column<Int> = integer("due_date")

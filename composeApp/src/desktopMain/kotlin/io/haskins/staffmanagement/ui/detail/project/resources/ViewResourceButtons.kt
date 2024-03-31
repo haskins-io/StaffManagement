@@ -11,7 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.haskins.staffmanagement.StaffManagementIcons
-import io.haskins.staffmanagement.models.ProjectResource
+import io.haskins.staffmanagement.models.dao.ProjectResource
 import org.jetbrains.jewel.ui.component.Icon
 import org.jetbrains.jewel.ui.component.IconButton
 import org.jetbrains.jewel.ui.component.Text

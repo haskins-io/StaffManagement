@@ -6,9 +6,10 @@ import org.jetbrains.jewel.ui.component.Text
 
 @Composable
 fun ProjectPriorityView(priority: Int) {
-    when(priority){
-        ProjectPriority.Now.priority -> Text("Now")
-        ProjectPriority.Next.priority -> Text("Next")
-        ProjectPriority.Future.priority -> Text("Future")
+    when(priority) {
+        ProjectPriority.NotSet.id -> Text("Not Set")
+        ProjectPriority.Now.id -> Text("Now")
+        ProjectPriority.Next.id -> Text("Next")
+        ProjectPriority.Future.id -> Text("Future")
     }
 }

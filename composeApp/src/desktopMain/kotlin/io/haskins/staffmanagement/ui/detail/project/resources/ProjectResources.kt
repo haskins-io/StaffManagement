@@ -3,6 +3,7 @@ package io.haskins.staffmanagement.ui.detail.project.resources
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.models.ListItem
 import io.haskins.staffmanagement.ui.components.ConfirmDialog
@@ -17,7 +18,7 @@ fun ProjectResources(currentDetail: MutableState<ListItem>) {
     val selectedResource: MutableState<Int> = remember { mutableStateOf(0) }
     val deleteDialog: MutableState<Boolean> = remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.padding()) {
+    Column(modifier = Modifier.padding(10.dp)) {
 
         if (addingNew.value) {
             AllocateResource(addingNew, projectId = currentDetail.value.id)

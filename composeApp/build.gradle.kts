@@ -27,14 +27,12 @@ kotlin {
             implementation("org.postgresql:postgresql:42.7.3")
 
             implementation("org.jetbrains.jewel:jewel-int-ui-standalone:0.15.2")
-
-            // Optional, for custom decorated windows:
             implementation("org.jetbrains.jewel:jewel-int-ui-decorated-window:0.15.2")
-
-            // Do not bring in Material (we use Jewel)
             implementation(compose.desktop.currentOs) {
                 exclude(group = "org.jetbrains.compose.material")
             }
+
+            implementation ("org.jetbrains.compose.material3:material3-desktop:1.6.1")
 
             implementation("io.github.windedge.table:table:0.1.6")
 

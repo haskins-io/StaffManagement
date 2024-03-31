@@ -7,8 +7,9 @@ import org.jetbrains.jewel.ui.component.Text
 @Composable
 fun ProjectStatusView(status: Int) {
     when(status){
-        ProjectStatus.Red.status -> Text("Red")
-        ProjectStatus.Amber.status -> Text("Amber")
-        ProjectStatus.Green.status -> Text("Green")
+        ProjectStatus.NotSet.id -> Text("Not Set")
+        ProjectStatus.Red.id -> Text("Red")
+        ProjectStatus.Amber.id -> Text("Amber")
+        ProjectStatus.Green.id -> Text("Green")
     }
 }

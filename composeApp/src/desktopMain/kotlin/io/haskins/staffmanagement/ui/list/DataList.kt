@@ -15,7 +15,7 @@ import io.haskins.staffmanagement.dao.EmployeeDao
 import io.haskins.staffmanagement.dao.ManagerDao
 import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.enums.FilterType
-import io.haskins.staffmanagement.models.ListFilter
+import io.haskins.staffmanagement.models.DropDownOption
 import io.haskins.staffmanagement.models.ListItem
 import org.jetbrains.jewel.intui.standalone.styling.light
 import org.jetbrains.jewel.ui.Orientation
@@ -27,10 +27,10 @@ import org.jetbrains.jewel.ui.component.styling.DividerStyle
 fun dataList(currentDetail: MutableState<ListItem>) {
 
     val filterOptions = arrayOf(
-        ListFilter(FilterType.Projects.id, "Projects"),
-        ListFilter(FilterType.Departments.id, "Departments"),
-        ListFilter(FilterType.Managers.id, "Managers"),
-        ListFilter(FilterType.Employees.id, "Employees"),
+        DropDownOption(FilterType.Projects.id, "Projects"),
+        DropDownOption(FilterType.Departments.id, "Departments"),
+        DropDownOption(FilterType.Managers.id, "Managers"),
+        DropDownOption(FilterType.Employees.id, "Employees"),
     )
 
     var selected by remember { mutableStateOf(filterOptions[0]) }
@@ -66,14 +66,14 @@ fun dataList(currentDetail: MutableState<ListItem>) {
 }
 
 @Composable
-fun listBody(filter: ListFilter,
+fun listBody(filter: DropDownOption,
              currentDetail: MutableState<ListItem>
 ) {
 
     var data = listOf<ListItem>()
 
     when(filter.id) {
-        FilterType.Projects.id -> data = ProjectDao.getInstance().projects()
+        FilterType.Projects.id -> data = ProjectDao.getInstance().projectsList()
         FilterType.Departments.id -> data = DepartmentDao.getInstance().departmentHeads()
         FilterType.Managers.id -> data = ManagerDao.getInstance().managers()
         FilterType.Employees.id -> data = EmployeeDao.getInstance().employees()

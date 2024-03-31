@@ -1,6 +1,6 @@
 package io.haskins.staffmanagement.models
 
-class ListFilter(
+class DropDownOption(
     val id: Int,
     val name: String
 )

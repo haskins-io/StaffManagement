@@ -6,8 +6,8 @@ import io.haskins.staffmanagement.dao.models.ProjectResources
 import io.haskins.staffmanagement.dao.models.Projects
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
-import io.haskins.staffmanagement.models.Note
-import io.haskins.staffmanagement.models.ProjectResource
+import io.haskins.staffmanagement.models.dao.Note
+import io.haskins.staffmanagement.models.dao.ProjectResource
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll

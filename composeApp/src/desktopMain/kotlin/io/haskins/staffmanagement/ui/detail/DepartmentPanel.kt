@@ -1,10 +1,7 @@
 package io.haskins.staffmanagement.ui.detail
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -36,11 +33,11 @@ fun departmentPanel(currentDetail: MutableState<ListItem>) {
             DetailTitle(currentDetail.value.name)
 
             Row {
-                Box(modifier = Modifier.padding(10.dp).verticalScroll(vScrollState)) {
+                Box(modifier = Modifier.padding(20.dp).verticalScroll(vScrollState)) {
                     DataTable(
                         columns = {
-                            column { Text("") }
-                            column { Text("Name") }
+                            column(Modifier.width(30.dp)) { Text("") }
+                            column(Modifier.fillMaxWidth()) { Text("Name") }
                         }
                     ) {
                         employees.forEach { employee ->
@@ -49,14 +46,14 @@ fun departmentPanel(currentDetail: MutableState<ListItem>) {
 
                             row(modifier = Modifier) {
 
-                                cell {
+                                cell(Modifier.width(30.dp)) {
                                     if (employee.isManager) {
                                         filter = FilterType.Managers.id
                                         Icon(Icons.Filled.Person, "Manager")
                                     }
                                 }
 
-                                cell {
+                                cell(Modifier.fillMaxWidth()) {
                                     Box(modifier = Modifier.clickable {
                                         currentDetail.value =
                                             ListItem(employee.id, employee.name, type = filter)

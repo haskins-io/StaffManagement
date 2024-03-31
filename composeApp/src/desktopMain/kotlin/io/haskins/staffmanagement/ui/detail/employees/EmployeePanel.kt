@@ -8,10 +8,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import io.haskins.staffmanagement.models.ListItem
 import io.haskins.staffmanagement.ui.components.DetailTitle
-import org.jetbrains.jewel.ui.component.SimpleTabContent
-import org.jetbrains.jewel.ui.component.TabData
-import org.jetbrains.jewel.ui.component.TabStrip
-import org.jetbrains.jewel.ui.component.Text
+import org.jetbrains.jewel.ui.Orientation
+import org.jetbrains.jewel.ui.component.*
 
 @Composable
 fun employeePanel(currentDetail: MutableState<ListItem>) {
@@ -46,6 +44,11 @@ fun employeePanel(currentDetail: MutableState<ListItem>) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 TabStrip(tabs, modifier = Modifier.weight(1f))
             }
+
+            Row {
+                Divider(Orientation.Horizontal)
+            }
+
             when (selectedTabIndex) {
                 0 -> employeeOverview(currentDetail)
                 1 -> employeeNotes(currentDetail)

@@ -7,7 +7,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import io.github.windedge.table.DataTable
-import io.haskins.staffmanagement.models.ProjectResource
+import io.haskins.staffmanagement.models.dao.ProjectResource
 import io.haskins.staffmanagement.ui.components.AddButtonRow
 import org.jetbrains.jewel.ui.component.*
 
