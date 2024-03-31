@@ -33,11 +33,10 @@ Crud the things
 * ~~Cost~~
 * background information about project. Where did it comes. Why are we doing this, etc?
 * tasks to project
-* Project Team?
-* Progress
+* ~~Progress~~
 
 ### Employee
-* Holiday tracking
+* ~~Holiday tracking~~
 
 ## Possible ideas
 * Nice Timeline/calendar view for employee allocation start/end against project

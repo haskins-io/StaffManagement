@@ -8,6 +8,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import io.haskins.staffmanagement.models.ListItem
 import io.haskins.staffmanagement.ui.components.DetailTitle
+import io.haskins.staffmanagement.ui.detail.employees.holidays.employeeHolidays
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.*
 

@@ -4,6 +4,7 @@ import io.haskins.staffmanagement.dao.models.*
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
 import io.haskins.staffmanagement.models.dao.Employee
+import io.haskins.staffmanagement.models.dao.Holiday
 import io.haskins.staffmanagement.models.dao.Note
 import io.haskins.staffmanagement.models.dao.ProjectResource
 import io.haskins.staffmanagement.utils.DateUtils
@@ -77,6 +78,10 @@ class EmployeeDao private constructor() {
         return employee
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Projects
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     fun projects(employeeId: Int): List<ProjectResource> {
 
         val projects = mutableListOf<ProjectResource>()
@@ -98,7 +103,7 @@ class EmployeeDao private constructor() {
                     0,
                     "",
                     t[ProjectResources.allocation],
-                    0f,
+                    t[ProjectResources.cost],
                     DateUtils.epochToLocalDate(0),
                     DateUtils.epochToLocalDate(0)
                 )
@@ -128,14 +133,12 @@ class EmployeeDao private constructor() {
                 .toList()
 
             for (t in tmp) {
-                val instant = Instant.ofEpochMilli(t[EmployeeNotes.date].toLong())
-                val zoneId = ZoneId.systemDefault()
 
                 val employee = Note(
                     t[EmployeeNotes.id],
                     t[EmployeeNotes.title],
                     t[EmployeeNotes.note],
-                    instant.atZone(zoneId).toLocalDate(),
+                    DateUtils.epochToLocalDate(t[EmployeeNotes.date]),
                 )
 
                 notes.add(employee)
@@ -152,6 +155,51 @@ class EmployeeDao private constructor() {
                 it[EmployeeNotes.employeeId] = employeeId
                 it[EmployeeNotes.title] = title
                 it[EmployeeNotes.note] = note
+            }
+        }
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    ///// Holidays
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    fun holidays(employeeId: Int): List<Holiday> {
+
+        val holidays = mutableListOf<Holiday>()
+
+        transaction {
+
+            val tmp = EmployeeHolidays
+                .selectAll()
+                .where {
+                    EmployeeHolidays.employeeId.eq(employeeId)
+                }
+                .orderBy(EmployeeHolidays.start)
+                .toList()
+
+            for (t in tmp) {
+
+                val holiday = Holiday(
+                    t[EmployeeHolidays.id],
+                    t[EmployeeHolidays.employeeId],
+                    DateUtils.epochToLocalDate(t[EmployeeHolidays.start]),
+                    DateUtils.epochToLocalDate(t[EmployeeHolidays.end]),
+                )
+
+                holidays.add(holiday)
+            }
+        }
+
+        return holidays
+    }
+
+    fun addHoliday(employeeId: Int, start: Long, end: Long) {
+
+        transaction {
+
+            EmployeeHolidays.insert {
+                it[EmployeeHolidays.employeeId] = employeeId
+                it[EmployeeHolidays.start] = start
+                it[EmployeeHolidays.end] = end
             }
         }
     }

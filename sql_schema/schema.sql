@@ -128,10 +128,10 @@ alter sequence role_role_id_seq owned by roles.role_id;
 create table employeeholidays
 (
     eh_id       integer default nextval('employees_holidays_eh_id_seq'::regclass) not null
-        constraint employees_holidays_pk
+        constraint employeesholidays_pk
             primary key,
     employee_id integer
-        constraint employees_holidays_employees__fk
+        constraint employeesholidays_employees__fk
             references employees,
     start       bigint  default 0                                                 not null,
     "end"       bigint  default 0                                                 not null
