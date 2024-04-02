@@ -10,6 +10,7 @@ import io.haskins.staffmanagement.models.ListItem
 import io.haskins.staffmanagement.ui.components.DetailTitle
 import io.haskins.staffmanagement.ui.detail.project.overview.projectOverview
 import io.haskins.staffmanagement.ui.detail.project.resources.ProjectResources
+import io.haskins.staffmanagement.ui.detail.project.tasks.ProjectTasks
 import org.jetbrains.jewel.ui.Orientation
 import org.jetbrains.jewel.ui.component.*
 

@@ -24,19 +24,13 @@ I'm using the Jetbrains Jewel stand-alone theme to try and make it look like a J
 Crud the things
 
 ### Projects
-* ~~employees to projects~~
-* ~~notes / Comments~~
-* ~~budget~~
-* ~~Status - Red/Amber/Green~~
-* ~~Priority~~
-* ~~Due Date~~
-* ~~Cost~~
 * background information about project. Where did it comes. Why are we doing this, etc?
-* tasks to project
-* ~~Progress~~
+* tasks
 
 ### Employee
 * ~~Holiday tracking~~
+* Contact Details
+* Employee information e.g. hire date
 
 ## Possible ideas
 * Nice Timeline/calendar view for employee allocation start/end against project

@@ -1,4 +1,4 @@
-package io.haskins.staffmanagement.ui.detail.project
+package io.haskins.staffmanagement.ui.detail.project.tasks
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

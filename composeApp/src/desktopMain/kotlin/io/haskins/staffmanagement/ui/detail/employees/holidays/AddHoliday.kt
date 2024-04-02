@@ -5,10 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.onClick
 import androidx.compose.material.TextButton
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import io.github.windedge.table.DataTable
@@ -27,15 +24,11 @@ fun AddHoliday(
     addingNew: MutableState<Boolean>
 ) {
 
-    var startControl by remember { mutableStateOf(false) }
     var showDateDialog by remember { mutableStateOf(false) }
 
-    val startState = rememberDatePickerState(
-        initialSelectedDateMillis = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
-    )
-
-    val endState = rememberDatePickerState(
-        initialSelectedDateMillis = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+    val state = rememberDateRangePickerState(
+        initialSelectedStartDateMillis = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli(),
+        initialSelectedEndDateMillis = LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli(),
     )
 
     Column {
@@ -48,25 +41,13 @@ fun AddHoliday(
         ) {
 
             row(modifier = Modifier) {
-                cell { Text(text = "Start") }
+                cell { Text(text = "Period") }
                 cell {
                     Text(
-                        text = DateUtils.epochToLocalDate(startState.selectedDateMillis!!).toString(),
+                        text = DateUtils.epochToLocalDate(state.selectedStartDateMillis ?: 0).toString() +
+                                " - "
+                                + DateUtils.epochToLocalDate(state.selectedEndDateMillis ?: 0).toString(),
                         Modifier.onClick {
-                            startControl = true
-                            showDateDialog = true
-                        }
-                    )
-                }
-            }
-
-            row(modifier = Modifier) {
-                cell { Text(text = "End") }
-                cell {
-                    Text(
-                        text = DateUtils.epochToLocalDate(endState.selectedDateMillis!!).toString(),
-                        Modifier.onClick {
-                            startControl = false
                             showDateDialog = true
                         }
                     )
@@ -83,8 +64,8 @@ fun AddHoliday(
             DefaultButton({
                 EmployeeDao.getInstance().addHoliday(
                     employeeId = currentDetail.value.id,
-                    start = startState.selectedDateMillis!!,
-                    end = endState.selectedDateMillis!!
+                    start = state.selectedStartDateMillis!!,
+                    end = state.selectedEndDateMillis!!
                 )
                 addingNew.value = false
             }) {
@@ -118,11 +99,7 @@ fun AddHoliday(
                 }
             },
             content = {
-                if (startControl) {
-                    DatePicker(state = startState)
-                } else {
-                    DatePicker(state = endState)
-                }
+                DateRangePicker(state = state)
             }
         )
     }
