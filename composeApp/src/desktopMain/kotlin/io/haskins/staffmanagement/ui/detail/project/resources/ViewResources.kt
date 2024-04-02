@@ -4,8 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import io.github.windedge.table.DataTable
-import io.github.windedge.table.RowBuilderImpl
 import io.haskins.staffmanagement.models.dao.ProjectResource
+import io.haskins.staffmanagement.ui.components.TableHeader
 import io.haskins.staffmanagement.ui.components.buttonrows.AddButtonRow
 import io.haskins.staffmanagement.utils.FormatUtils
 import org.jetbrains.jewel.ui.component.*
@@ -29,11 +29,11 @@ fun ColumnScope.ViewResources(
     Row {
         DataTable(
             columns = {
-                column { Text("Name") }
-                column { Text("Allocation") }
-                column { Text("Rate") }
-                column { Text("Cost") }
-                column { Text("") }
+                column { TableHeader("Name") }
+                column { TableHeader("Allocation") }
+                column { TableHeader("Rate") }
+                column { TableHeader("Cost") }
+                column { TableHeader("") }
             }
         ) {
 
@@ -61,7 +61,6 @@ fun ColumnScope.ViewResources(
                             EditResourceButtons(
                                 isEditing,
                                 resource,
-                                selectedResource,
                                 allocation
                             )
                         } else {

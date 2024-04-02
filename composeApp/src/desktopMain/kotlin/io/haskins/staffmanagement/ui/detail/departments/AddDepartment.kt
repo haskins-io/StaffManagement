@@ -1,4 +1,4 @@
-package io.haskins.staffmanagement.ui.detail.project.resources
+package io.haskins.staffmanagement.ui.detail.departments
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
+import io.haskins.staffmanagement.dao.DepartmentDao
 import io.haskins.staffmanagement.dao.EmployeeDao
 import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.ui.components.TableHeader
@@ -16,12 +17,9 @@ import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextField
 
 @Composable
-fun AllocateResource(
-    addingNew: MutableState<Boolean>,
-    projectId: Int
-) {
+fun AddDepartment(addingNew: MutableState<Boolean>) {
 
-    var allocation by remember { mutableStateOf("0") }
+    var department by remember { mutableStateOf("") }
 
     val employees = EmployeeDao.getInstance().employees()
     var selected by remember { mutableStateOf(employees[0]) }
@@ -36,7 +34,13 @@ fun AllocateResource(
         ) {
 
             row(modifier = Modifier) {
-                cell { TableHeader("Resource") }
+                cell { TableHeader("Department Name") }
+                cell { TextField(department, { department = it }) }
+
+            }
+
+            row(modifier = Modifier) {
+                cell { TableHeader("Department Head") }
                 cell {
                     Dropdown(
                         menuContent = {
@@ -54,11 +58,6 @@ fun AllocateResource(
                     }
                 }
             }
-
-            row(Modifier.padding(5.dp)) {
-                cell { TableHeader("Allocation") }
-                cell { TextField(allocation, { allocation = it }) }
-            }
         }
 
         Row {
@@ -75,14 +74,13 @@ fun AllocateResource(
             DefaultButton(
                 modifier = Modifier.padding(5.dp),
                 onClick = {
-                ProjectDao.getInstance().allocateResource(
-                    projectId = projectId,
-                    employeeId = selected.id,
-                    allocationPerc = allocation.toInt()
-                )
+                    DepartmentDao.getInstance().create(
+                        name = department,
+                        head = selected.id,
+                    )
 
-                addingNew.value = false
-            }) {
+                    addingNew.value = false
+                }) {
                 Text("Save")
             }
         }

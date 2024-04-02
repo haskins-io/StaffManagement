@@ -19,7 +19,6 @@ import org.jetbrains.jewel.ui.component.*
 fun BoxScope.EditResourceButtons(
     isEditing: MutableState<Boolean>,
     resource: ProjectResource,
-    selectedResource: MutableState<Int>,
     allocation: MutableState<String>
 ) {
 

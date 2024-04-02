@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
 import io.haskins.staffmanagement.dao.EmployeeDao
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.ui.components.TableHeader
 import io.haskins.staffmanagement.ui.components.buttonrows.AddButtonRow
 import org.jetbrains.jewel.ui.component.Text
 
@@ -37,8 +38,8 @@ fun employeeHolidays(currentDetail: MutableState<ListItem>) {
             Row {
                 DataTable(
                     columns =  {
-                        column { Text("Start") }
-                        column { Text("End") }
+                        column { TableHeader("Start") }
+                        column { TableHeader("End") }
                     }
                 ) {
                     holidays.forEach { holiday ->

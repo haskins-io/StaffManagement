@@ -13,6 +13,7 @@ import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
 import io.haskins.staffmanagement.dao.EmployeeDao
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.ui.components.TableHeader
 import org.jetbrains.jewel.ui.component.Text
 
 @Composable
@@ -35,9 +36,9 @@ fun employeeOverview(currentDetail: MutableState<ListItem>) {
     Box(modifier = Modifier.padding(10.dp).verticalScroll(vScrollState)) {
         DataTable(
             columns = {
-                column { Text("Name") }
-                column { Text("Allocation") }
-                column { Text("Cost") }
+                column { TableHeader("Name") }
+                column { TableHeader("Allocation") }
+                column { TableHeader("Cost") }
             }
         ) {
 

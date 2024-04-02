@@ -116,6 +116,22 @@ class ProjectDao private constructor() {
         return project
     }
 
+    fun create(project: Project) {
+
+        transaction {
+            Projects.insert {
+                it[name] = project.name
+                it[description] = project.description
+                it[code] = project.code
+                it[budget] = project.budget
+                it[status] = project.status
+                it[priority] = project.priority
+                it[due] = DateUtils.localDateToEpoch(project.due)
+                it[progress] = project.progress
+            }
+        }
+    }
+
     fun update(project: Project) {
 
         transaction {
@@ -221,22 +237,22 @@ class ProjectDao private constructor() {
 
         transaction {
 
-            val tmp = ProjectNotes
+            val tmp = (ProjectNotes innerJoin Notes)
                 .selectAll()
                 .where {
                     ProjectNotes.projectId.eq(id)
                 }
-                .orderBy(ProjectNotes.date, order = SortOrder.ASC)
+                .orderBy(Notes.date, order = SortOrder.ASC)
                 .toList()
 
             for (t in tmp) {
-                val instant = Instant.ofEpochMilli(t[ProjectNotes.date].toLong())
+                val instant = Instant.ofEpochMilli(t[Notes.date].toLong())
                 val zoneId = ZoneId.systemDefault()
 
                 val employee = Note(
-                    t[ProjectNotes.id],
-                    t[ProjectNotes.title],
-                    t[ProjectNotes.note],
+                    t[Notes.id].value,
+                    t[Notes.title],
+                    t[Notes.note],
                     instant.atZone(zoneId).toLocalDate(),
                 )
 
@@ -248,12 +264,18 @@ class ProjectDao private constructor() {
     }
 
     fun addNote(projectId: Int, title: String, note: String) {
+
         transaction {
+
+            val noteId = Notes.insertAndGetId {
+                it[Notes.title] = title
+                it[Notes.note] = note
+                DateUtils.localDateToEpoch(LocalDate.now())
+            }
 
             ProjectNotes.insert {
                 it[ProjectNotes.projectId] = projectId
-                it[ProjectNotes.title] = title
-                it[ProjectNotes.note] = note
+                it[ProjectNotes.noteId] = noteId.value
             }
         }
     }

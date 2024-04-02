@@ -33,6 +33,16 @@ create sequence department_department_id_seq
 
 alter sequence department_department_id_seq owner to postgres;
 
+create sequence projecttasks_pt_id_seq
+    as integer;
+
+alter sequence projecttasks_pt_id_seq owner to postgres;
+
+create sequence projecttasks_pt_id_seq1
+    as integer;
+
+alter sequence projecttasks_pt_id_seq1 owner to postgres;
+
 create table employees
 (
     department_id   integer,
@@ -43,26 +53,32 @@ create table employees
         constraint employees_pk
             primary key,
     work_allocation integer default 0     not null,
-    is_manager      boolean default false not null
+    is_manager      boolean default false not null,
+    hired           bigint  default 0     not null,
+    location        text                  not null,
+    role            text                  not null
 );
+
+comment on column employees.role is 'role';
 
 alter table employees
     owner to markhaskins;
 
 create table projects
 (
-    name        text,
-    code        text,
-    project_id  integer default nextval('product_product_id_seq'::regclass) not null
+    name          text,
+    code          text,
+    project_id    integer default nextval('product_product_id_seq'::regclass) not null
         constraint projects_pk
             primary key,
-    budget      integer default 0                                           not null,
-    status      integer default 0                                           not null,
-    priority    integer default 0                                           not null,
-    description text                                                        not null,
-    progress    integer default 0                                           not null,
-    due_date    bigint  default 0                                           not null,
-    cost        integer default 0                                           not null
+    budget        integer default 0                                           not null,
+    status        integer default 0                                           not null,
+    priority      integer default 0                                           not null,
+    description   text                                                        not null,
+    progress      integer default 0                                           not null,
+    due_date      bigint  default 0                                           not null,
+    cost          integer default 0                                           not null,
+    documentation text    default ''::text                                    not null
 );
 
 alter table projects
@@ -142,23 +158,20 @@ alter table employeeholidays
 
 alter sequence employees_holidays_eh_id_seq owned by employeeholidays.eh_id;
 
-create table projectnotes
+create table notes
 (
-    pn_id      integer default nextval('project_notes_pn_id_seq'::regclass) not null
-        constraint projectnotes_pk
+    id    integer default nextval('project_notes_pn_id_seq'::regclass) not null
+        constraint notes_pk
             primary key,
-    project_id integer
-        constraint projectnotes_projects__fk
-            references projects,
-    title      text,
-    note       text,
-    date       bigint  default 0                                            not null
+    title text,
+    note  text,
+    date  bigint  default 0                                            not null
 );
 
-alter table projectnotes
+alter table notes
     owner to postgres;
 
-alter sequence project_notes_pn_id_seq owned by projectnotes.pn_id;
+alter sequence project_notes_pn_id_seq owned by notes.id;
 
 create table departments
 (
@@ -167,6 +180,8 @@ create table departments
             primary key,
     name          text                                                              not null,
     head          integer
+        constraint departments_employees__fk
+            references employees
 );
 
 alter table departments
@@ -179,22 +194,74 @@ create table employeenotes
     en_id       serial
         constraint employeenotes_pk
             primary key,
-    employee_id integer          not null
+    employee_id integer           not null
         constraint employeenotes_employees__fk
             references employees,
-    title       text,
-    note        text,
-    date        bigint default 0 not null
+    note_id     integer default 0 not null
 );
 
 alter table employeenotes
     owner to postgres;
 
+create table tasks
+(
+    id       integer default nextval('projecttasks_pt_id_seq'::regclass) not null
+        constraint tasks_pk
+            primary key,
+    name     text    default ''::text                                    not null,
+    assigned integer default 0                                           not null,
+    progress integer default 0                                           not null,
+    status   integer default 0                                           not null,
+    due      bigint  default 0                                           not null,
+    priority integer default 0                                           not null
+);
+
+alter table tasks
+    owner to postgres;
+
+alter sequence projecttasks_pt_id_seq owned by tasks.id;
+
 create table projecttasks
 (
-    pt_id serial
+    pt_id      integer default nextval('projecttasks_pt_id_seq1'::regclass) not null
+        constraint projecttasks_pk
+            primary key,
+    project_id integer default 0
+        constraint projecttasks_projects__fk
+            references projects,
+    task_id    integer default 0                                            not null
 );
 
 alter table projecttasks
+    owner to postgres;
+
+alter sequence projecttasks_pt_id_seq1 owned by projecttasks.pt_id;
+
+create table employeetasks
+(
+    et_id       serial
+        constraint employeetasks_pk
+            primary key,
+    employee_id integer default 0 not null
+        constraint employeetasks_employees__fk
+            references employees,
+    task_id     integer default 0 not null
+);
+
+alter table employeetasks
+    owner to postgres;
+
+create table projectnotes
+(
+    pn_id      serial
+        constraint projectnotes_pk
+            primary key,
+    project_id integer default 0 not null,
+    note_id    integer default 0 not null
+        constraint projectnotes_notes__fk
+            references notes
+);
+
+alter table projectnotes
     owner to postgres;
 

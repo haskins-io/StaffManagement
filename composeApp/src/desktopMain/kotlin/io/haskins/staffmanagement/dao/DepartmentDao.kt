@@ -5,6 +5,8 @@ import io.haskins.staffmanagement.dao.models.Employees
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.dao.Employee
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.models.dao.Department
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -20,23 +22,25 @@ class DepartmentDao private constructor() {
         }
     }
 
-    fun departments(): List<ListItem> {
 
-        val departments = mutableListOf<ListItem>()
+    fun departments(): List<Department> {
+
+        val departments = mutableListOf<Department>()
 
         transaction {
 
-            val tmp = Departments
+            val tmp = (Departments innerJoin Employees)
                 .selectAll()
                 .orderBy(Departments.name)
                 .toList()
 
             for (department in tmp) {
 
-                val item = ListItem(
+                val item = Department(
                     department[Departments.id],
                     department[Departments.name],
-                    FilterType.Departments.id
+                    department[Employees.id],
+                    department[Employees.name],
                 )
 
                 departments.add(item)
@@ -72,31 +76,12 @@ class DepartmentDao private constructor() {
         return departments
     }
 
-    fun departmentEmployees(departmentId: Int): List<Employee> {
-
-        val employees = mutableListOf<Employee>()
-
+    fun create(name: String, head: Int) {
         transaction {
-            val tmp = Employees
-                .selectAll()
-                .where { Employees.departmentId eq departmentId }
-                .orderBy(Employees.name)
-                .toList()
-
-            for (t in tmp) {
-                val item = Employee(
-                    t[Employees.id],
-                    t[Employees.name],
-                    t[Employees.managerId],
-                    t[Employees.departmentId],
-                    t[Employees.rateId],
-                    t[Employees.isManager]
-                )
-
-                employees.add(item)
+            Departments.insert {
+                it[Departments.name] = name
+                it[Departments.head] = head
             }
         }
-
-        return employees
     }
 }

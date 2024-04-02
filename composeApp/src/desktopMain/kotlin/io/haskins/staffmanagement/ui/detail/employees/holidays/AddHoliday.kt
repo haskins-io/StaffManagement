@@ -3,14 +3,17 @@ package io.haskins.staffmanagement.ui.detail.employees.holidays
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.onClick
 import androidx.compose.material.TextButton
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import io.github.windedge.table.DataTable
 import io.haskins.staffmanagement.dao.EmployeeDao
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.ui.components.TableHeader
 import io.haskins.staffmanagement.utils.DateUtils
 import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Text
@@ -41,12 +44,12 @@ fun AddHoliday(
         ) {
 
             row(modifier = Modifier) {
-                cell { Text(text = "Period") }
+                cell { TableHeader("Period") }
                 cell {
                     Text(
                         text = DateUtils.epochToLocalDate(state.selectedStartDateMillis ?: 0).toString() +
-                                " - "
-                                + DateUtils.epochToLocalDate(state.selectedEndDateMillis ?: 0).toString(),
+                               " - " +
+                               DateUtils.epochToLocalDate(state.selectedEndDateMillis ?: 0).toString(),
                         Modifier.onClick {
                             showDateDialog = true
                         }
@@ -55,20 +58,26 @@ fun AddHoliday(
             }
         }
         Row {
-            DefaultButton({
-                addingNew.value = false
-            }) {
+            DefaultButton(
+                modifier = Modifier.padding(5.dp),
+                onClick = {
+                    addingNew.value = false
+                }
+            ) {
                 Text("Cancel")
             }
 
-            DefaultButton({
-                EmployeeDao.getInstance().addHoliday(
-                    employeeId = currentDetail.value.id,
-                    start = state.selectedStartDateMillis!!,
-                    end = state.selectedEndDateMillis!!
-                )
-                addingNew.value = false
-            }) {
+            DefaultButton(
+                modifier = Modifier.padding(5.dp),
+                onClick = {
+                    EmployeeDao.getInstance().addHoliday(
+                        employeeId = currentDetail.value.id,
+                        start = state.selectedStartDateMillis!!,
+                        end = state.selectedEndDateMillis!!
+                    )
+                    addingNew.value = false
+                }
+            ) {
                 Text("Save")
             }
         }

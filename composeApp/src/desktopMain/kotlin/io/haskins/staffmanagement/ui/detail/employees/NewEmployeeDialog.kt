@@ -1,32 +1,7 @@
 package io.haskins.staffmanagement.ui.detail.employees
 
-//import androidx.compose.foundation.BorderStroke
-//import androidx.compose.foundation.border
-//import androidx.compose.foundation.clickable
-//import androidx.compose.foundation.layout.*
-//import androidx.compose.foundation.shape.RoundedCornerShape
-//import androidx.compose.foundation.text.KeyboardOptions
-//import org.jetbrains.jewel.ui.component.DefaultButton
-//import androidx.compose.material3.Surface
-//import androidx.compose.material.icons.Icons
-//import androidx.compose.material.icons.filled.Call
-//import androidx.compose.material.icons.filled.Done
-//import org.jetbrains.jewel.ui.component.Icon
-//import org.jetbrains.jewel.ui.component.Text
-//import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-//import androidx.compose.runtime.mutableStateOf
-//import androidx.compose.runtime.remember
-//import androidx.compose.ui.Alignment
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.graphics.Color
-//import androidx.compose.ui.text.TextStyle
-//import androidx.compose.ui.text.font.FontFamily
-//import androidx.compose.ui.text.font.FontWeight
-//import androidx.compose.ui.text.input.KeyboardType
-//import androidx.compose.ui.unit.dp
-//import androidx.compose.ui.unit.sp
-//import androidx.compose.ui.window.Dialog
+
 
 @Composable
 fun newEmployeeDialog(value: String, setShowDialog: (Boolean) -> Unit, setValue: (String) -> Unit) {

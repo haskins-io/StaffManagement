@@ -30,7 +30,7 @@ Crud the things
 ### Employee
 * ~~Holiday tracking~~
 * Contact Details
-* Employee information e.g. hire date
+* ~~hire date~~
 
 ## Possible ideas
 * Nice Timeline/calendar view for employee allocation start/end against project

@@ -1,4 +1,4 @@
-package io.haskins.staffmanagement.ui.detail.project.overview
+ package io.haskins.staffmanagement.ui.detail.project.overview
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

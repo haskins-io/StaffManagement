@@ -9,6 +9,7 @@ object Projects: Table() {
     val name : Column<String> = varchar("name", length = 100)
     val description : Column<String> = varchar("description", length = 100)
     val code : Column<String> = varchar("code", length = 100)
+    val documentation : Column<String> = varchar("documentation", length = 100)
 
     val budget: Column<Int> = integer("budget")
     val cost: Column<Int> = integer("cost")

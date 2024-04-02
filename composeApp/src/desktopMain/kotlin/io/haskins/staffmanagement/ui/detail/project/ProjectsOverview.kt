@@ -17,6 +17,7 @@ import io.github.windedge.table.DataTable
 import io.haskins.staffmanagement.dao.ProjectDao
 import io.haskins.staffmanagement.enums.FilterType
 import io.haskins.staffmanagement.models.ListItem
+import io.haskins.staffmanagement.ui.components.TableHeader
 import io.haskins.staffmanagement.ui.components.buttonrows.AddButtonRow
 import io.haskins.staffmanagement.ui.components.project.ProjectPriorityView
 import io.haskins.staffmanagement.ui.components.project.ProjectStatusView
@@ -35,11 +36,11 @@ fun ProjectsOverview(currentDetail: MutableState<ListItem>) {
     Column(modifier = Modifier.padding(10.dp)) {
 
         if (addingNew.value) {
-
+            AddProject(addingNew)
         } else {
 
             AddButtonRow(
-                "Add Note",
+                "Add Project",
                 addingNew
             )
 
@@ -49,13 +50,13 @@ fun ProjectsOverview(currentDetail: MutableState<ListItem>) {
 
                     DataTable(
                         columns = {
-                            column { Text("Name") }
-                            column { Text("Budget") }
-                            column { Text("Cost") }
-                            column { Text("Status") }
-                            column { Text("Priority") }
-                            column { Text("Progress") }
-                            column { Text("Due Date") }
+                            column { TableHeader("Name") }
+                            column { TableHeader("Budget") }
+                            column { TableHeader("Cost") }
+                            column { TableHeader("Status") }
+                            column { TableHeader("Priority") }
+                            column { TableHeader("Progress") }
+                            column { TableHeader("Due Date") }
                         }
                     ) {
 

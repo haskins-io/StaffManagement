@@ -2,7 +2,8 @@ package io.haskins.staffmanagement
 
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.window.application
-import io.haskins.staffmanagement.ui.components.twoColumnLayout
+import io.haskins.staffmanagement.ui.components.TitleBarView
+import io.haskins.staffmanagement.ui.components.TwoColumnLayout
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.jewel.foundation.theme.JewelTheme
 import org.jetbrains.jewel.intui.standalone.Inter
@@ -27,14 +28,15 @@ fun main() = application {
         themeDefinition,
         ComponentStyling.decoratedWindow(
             titleBarStyle = TitleBarStyle.light()
-        )
+        ),
+        swingCompatMode = false
     ) {
         DecoratedWindow(
             onCloseRequest = { exitApplication() },
             title = "Staff Management",
         ) {
-//            TitleBarView()
-            twoColumnLayout()
+            TitleBarView()
+            TwoColumnLayout()
         }
     }
 }

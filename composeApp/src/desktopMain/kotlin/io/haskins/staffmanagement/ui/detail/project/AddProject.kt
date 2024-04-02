@@ -1,8 +1,7 @@
-package io.haskins.staffmanagement.ui.detail.project.overview
+package io.haskins.staffmanagement.ui.detail.project
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.onClick
 import androidx.compose.material.TextButton
@@ -26,24 +25,24 @@ import org.jetbrains.jewel.ui.component.DefaultButton
 import org.jetbrains.jewel.ui.component.Text
 import org.jetbrains.jewel.ui.component.TextArea
 import org.jetbrains.jewel.ui.component.TextField
+import java.time.LocalDate
 import java.time.ZoneOffset
-
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun EditProjectOverview(project: Project, editing: MutableState<Boolean>) {
+fun AddProject(addingNew: MutableState<Boolean>) {
 
-    var name by remember { mutableStateOf(project.name) }
-    var description by remember { mutableStateOf(project.description) }
-    var code by remember { mutableStateOf(project.code) }
-    var budget by remember { mutableStateOf(project.budget.toString()) }
-    var progress by remember { mutableStateOf(project.progress.toString()) }
-    val status: MutableState<Int> = remember { mutableStateOf(project.status) }
-    val priority: MutableState<Int> = remember { mutableStateOf(project.priority) }
+    var name by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var code by remember { mutableStateOf("") }
+    var budget by remember { mutableStateOf("0") }
+    var progress by remember { mutableStateOf("0") }
+    val status: MutableState<Int> = remember { mutableStateOf(1) }
+    val priority: MutableState<Int> = remember { mutableStateOf(1) }
 
     var showDateDialog by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState(
-        initialSelectedDateMillis = project.due.atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
+        initialSelectedDateMillis  =LocalDate.now().atStartOfDay().toInstant(ZoneOffset.UTC).toEpochMilli()
     )
 
     DataTable(
@@ -75,11 +74,6 @@ fun EditProjectOverview(project: Project, editing: MutableState<Boolean>) {
         row(modifier = Modifier) {
             cell { TableHeader("Budget") }
             cell { TextField(budget, { budget = it  }) }
-        }
-
-        row(modifier = Modifier) {
-            cell { TableHeader("Cost") }
-            cell { Text(project.cost.toString()) }
         }
 
         row(modifier = Modifier) {
@@ -134,7 +128,7 @@ fun EditProjectOverview(project: Project, editing: MutableState<Boolean>) {
         DefaultButton(
             modifier = Modifier.padding(5.dp),
             onClick = {
-                editing.value = false
+                addingNew.value = false
             }
         ) {
             Text("Cancel")
@@ -144,7 +138,7 @@ fun EditProjectOverview(project: Project, editing: MutableState<Boolean>) {
             modifier = Modifier.padding(5.dp),
             onClick = {
                 val prj = Project(
-                    project.id,
+                    0,
                     name,
                     description,
                     code,
@@ -156,9 +150,9 @@ fun EditProjectOverview(project: Project, editing: MutableState<Boolean>) {
                     progress.toInt(),
                 )
 
-                ProjectDao.getInstance().update(prj)
+                ProjectDao.getInstance().create(prj)
 
-                editing.value = false
+                addingNew.value = false
             }
         ) {
             Text("Save")

@@ -10,9 +10,11 @@ import io.haskins.staffmanagement.models.dao.ProjectResource
 import io.haskins.staffmanagement.utils.DateUtils
 import org.jetbrains.exposed.sql.SortOrder
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.insertAndGetId
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.time.Instant
+import java.time.LocalDate
 import java.time.ZoneId
 
 class EmployeeDao private constructor() {
@@ -124,24 +126,24 @@ class EmployeeDao private constructor() {
 
         transaction {
 
-            val tmp = EmployeeNotes
+            val tmp = (EmployeeNotes innerJoin Notes)
                 .selectAll()
                 .where {
                     EmployeeNotes.employeeId.eq(id)
                 }
-                .orderBy(EmployeeNotes.date, order = SortOrder.ASC)
+                .orderBy(Notes.date, order = SortOrder.ASC)
                 .toList()
 
             for (t in tmp) {
 
-                val employee = Note(
-                    t[EmployeeNotes.id],
-                    t[EmployeeNotes.title],
-                    t[EmployeeNotes.note],
-                    DateUtils.epochToLocalDate(t[EmployeeNotes.date]),
+                val note = Note(
+                    t[Notes.id].value,
+                    t[Notes.title],
+                    t[Notes.note],
+                    DateUtils.epochToLocalDate(t[Notes.date]),
                 )
 
-                notes.add(employee)
+                notes.add(note)
             }
         }
 
@@ -149,12 +151,18 @@ class EmployeeDao private constructor() {
     }
 
     fun addNote(employeeId: Int, title: String, note: String) {
+
         transaction {
+
+            val noteId = Notes.insertAndGetId {
+                it[Notes.title] = title
+                it[Notes.note] = note
+                DateUtils.localDateToEpoch(LocalDate.now())
+            }
 
             EmployeeNotes.insert {
                 it[EmployeeNotes.employeeId] = employeeId
-                it[EmployeeNotes.title] = title
-                it[EmployeeNotes.note] = note
+                it[EmployeeNotes.noteId] = noteId.value
             }
         }
     }

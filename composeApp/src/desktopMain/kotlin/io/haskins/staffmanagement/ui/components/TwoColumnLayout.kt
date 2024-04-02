@@ -13,7 +13,7 @@ import io.haskins.staffmanagement.ui.list.dataList
 import org.jetbrains.jewel.ui.component.HorizontalSplitLayout
 
 @Composable
-fun twoColumnLayout() {
+fun TwoColumnLayout() {
 
     val currentDetail: MutableState<ListItem> = remember { mutableStateOf(ListItem(0,"",1)) }
 

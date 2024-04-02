@@ -6,6 +6,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import io.github.windedge.table.DataTable
 import io.haskins.staffmanagement.models.dao.Project
+import io.haskins.staffmanagement.ui.components.TableHeader
 import io.haskins.staffmanagement.ui.components.buttonrows.EditButtonRow
 import io.haskins.staffmanagement.ui.components.project.ProjectPriorityView
 import io.haskins.staffmanagement.ui.components.project.ProjectStatusView
@@ -25,47 +26,47 @@ fun ColumnScope.ViewProjectOverview(project: Project, editing: MutableState<Bool
     ) {
 
         row(modifier = Modifier) {
-            cell { Text(text = "Name") }
+            cell { TableHeader("Name") }
             cell { Text(text = project.name) }
         }
 
         row(modifier = Modifier) {
-            cell { Text(text = "Description") }
+            cell { TableHeader( "Description") }
             cell { Text(text = project.description) }
         }
 
         row(modifier = Modifier) {
-            cell { Text(text = "Code") }
+            cell { TableHeader( "Code") }
             cell { Text(text = project.code) }
         }
 
         row(modifier = Modifier) {
-            cell { Text(text = "Budget") }
+            cell { TableHeader( "Budget") }
             cell { Text(text = FormatUtils.formatCurrency(project.budget)) }
         }
 
         row(modifier = Modifier) {
-            cell { Text(text = "Cost") }
+            cell { TableHeader( "Cost") }
             cell { Text(text = FormatUtils.formatCurrency(project.cost)) }
         }
 
         row(modifier = Modifier) {
-            cell { Text(text = "Status") }
+            cell { TableHeader( "Status") }
             cell { ProjectStatusView(project.status) }
         }
 
         row(modifier = Modifier) {
-            cell { Text(text = "priority") }
+            cell { TableHeader( "priority") }
             cell { ProjectPriorityView(project.priority) }
         }
 
         row(modifier = Modifier) {
-            cell { Text(text = "Due") }
+            cell { TableHeader( "Due") }
             cell { Text(text = project.due.toString()) }
         }
 
         row(modifier = Modifier) {
-            cell { Text(text = "Progress") }
+            cell { TableHeader( "Progress") }
             cell { Text(text = project.progress.toString()) }
         }
     }
